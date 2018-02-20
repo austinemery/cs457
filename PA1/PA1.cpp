@@ -51,21 +51,21 @@ int main()
 	readDatabaseList(directoryList);
 
 	cout << endl << "This is a data management program!" << endl;
-	cout << "Type commands for list of commands!" << endl;
+	cout << "Type COMMANDS for list of commands!" << endl;
 
 	do
 	{
 		cout << "Enter command: ";
 		cin >> inputFromUser;
 
-		if (inputFromUser == "commands")
+		if (inputFromUser == "COMMANDS")
 		{
 			cout << endl << "--Command List--" << endl;
 			cout << "listDirectories - Prints all directories" << endl;
 			cout << "printWorkingDirectory - Prints working directory" << endl;
-			cout << "createDirectory <name> - Creates a new directory" << endl;
-			cout << "deleteDirectory <name> - Deletes a existing directory" << endl;
-			cout << "changeDirectory <name> - Changes the working directory" << endl;
+			cout << "CREATE DATABASE <name> - Creates a new database" << endl;
+			cout << "DROP DATABASE <name> - Deletes a existing database" << endl;
+			cout << "USE <name> - Changes the working directory" << endl;
 			cout << "createTable <name> - Creates a new table in the working directory" << endl;
 			cout << "deleteTable <name> - Deletes a exiting table in the working directory" << endl;
 			cout << "quit - ends the program" << endl;
@@ -78,20 +78,36 @@ int main()
 		{
 			printWorkingDirectory();
 		}
-		else if (inputFromUser.find("createD") != string::npos)
+		else if (inputFromUser.find("CREATE") != string::npos)
 		{
 			cin >> inputFromUser;
-			createDirectory(directoryList, inputFromUser);
+			if (inputFromUser.find("DIRECTORY") != string::npos)
+			{	
+				cin >> inputFromUser;
+				createDirectory(directoryList, inputFromUser.substr(0, inputFromUser.length() - 1));
+			}
+			else if (inputFromUser.find("TABLE") != string::npos)
+			{
+				//do something
+			}		
 		}
-		else if (inputFromUser.find("deleteD") != string::npos)
+		else if (inputFromUser.find("DROP") != string::npos)
 		{
 			cin >> inputFromUser;
-			deleteDirectory(directoryList, inputFromUser);
+			if (inputFromUser.find("DIRECTORY") != string::npos)
+			{	
+				cin >> inputFromUser;
+				deleteDirectory(directoryList, inputFromUser.substr(0, inputFromUser.length() - 1));
+			}
+			else if (inputFromUser.find("TABLE") != string::npos)
+			{
+				//do something
+			}	
 		}
-		else if (inputFromUser.find("changeD") != string::npos)
+		else if (inputFromUser.find("USE") != string::npos)
 		{
 			cin >> inputFromUser;
-			changeWorkingDirectory(directoryList, inputFromUser);
+			changeWorkingDirectory(directoryList, inputFromUser.substr(0, inputFromUser.length() - 1));
 		}
 		else if (inputFromUser == "quit" || inputFromUser == "exit"){}
 		else 
@@ -189,7 +205,7 @@ void deleteDirectory(vector<string>& directoryVec, string directoryName)
 
 	if (globalWorkingDirectory == directoryName)
 	{
-		globalWorkingDirectory == "\0";
+		globalWorkingDirectory = '\0';
 	}
 
 	//update directory list file

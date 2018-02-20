@@ -63,8 +63,8 @@ int main()
 			cout << endl << "--Command List--" << endl;
 			cout << "listDirectories - Prints all directories" << endl;
 			cout << "printWorkingDirectory - Prints working directory" << endl;
-			cout << "CREATE DIRECTORY <name> - Creates a new directory" << endl;
-			cout << "DROP DIRECTORY <name> - Deletes a existing directory" << endl;
+			cout << "CREATE DATABASE <name> - Creates a new database" << endl;
+			cout << "DROP DATABASE <name> - Deletes a existing database" << endl;
 			cout << "USE <name> - Changes the working directory" << endl;
 			cout << "createTable <name> - Creates a new table in the working directory" << endl;
 			cout << "deleteTable <name> - Deletes a exiting table in the working directory" << endl;
@@ -84,7 +84,7 @@ int main()
 			if (inputFromUser.find("DIRECTORY") != string::npos)
 			{	
 				cin >> inputFromUser;
-				createDirectory(directoryList, inputFromUser.substr(inputFromUser.end() - 1));
+				createDirectory(directoryList, inputFromUser.substr(0, inputFromUser.length() - 1));
 			}
 			else if (inputFromUser.find("TABLE") != string::npos)
 			{
@@ -97,7 +97,7 @@ int main()
 			if (inputFromUser.find("DIRECTORY") != string::npos)
 			{	
 				cin >> inputFromUser;
-				deleteDirectory(directoryList, inputFromUser.substr());
+				deleteDirectory(directoryList, inputFromUser.substr(0, inputFromUser.length() - 1));
 			}
 			else if (inputFromUser.find("TABLE") != string::npos)
 			{
@@ -107,7 +107,7 @@ int main()
 		else if (inputFromUser.find("USE") != string::npos)
 		{
 			cin >> inputFromUser;
-			changeWorkingDirectory(directoryList, inputFromUser);
+			changeWorkingDirectory(directoryList, inputFromUser.substr(0, inputFromUser.length() - 1));
 		}
 		else if (inputFromUser == "quit" || inputFromUser == "exit"){}
 		else 
@@ -205,7 +205,7 @@ void deleteDirectory(vector<string>& directoryVec, string directoryName)
 
 	if (globalWorkingDirectory == directoryName)
 	{
-		globalWorkingDirectory == "\0";
+		globalWorkingDirectory = '\0';
 	}
 
 	//update directory list file
