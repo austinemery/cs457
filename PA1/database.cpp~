@@ -1,5 +1,7 @@
 /*TODO:
 
+make it so that the program get current working directory, instead of hardcoding the file path. We could use getcwd() while including unistd.h
+
 add table functionality
 
 
