@@ -93,6 +93,7 @@ int main()
 			cin >> inputFromUser;
 			changeWorkingDirectory(directoryList, inputFromUser);
 		}
+		else if (inputFromUser == "quit" || inputFromUser == "exit"){}
 		else 
 		{
 			cout << "--ERROR: Command not found, type commands for list--" << endl;
@@ -154,7 +155,6 @@ void createDirectory(vector<string>& directoryVec, string directoryName)
 	{
 		cout << "--ERROR: Could not make directory--" << endl;
 		cout << "--The file path used was ./data--" << endl;
-		exit(1);
 	}
 	
 	directoryVec.push_back(directoryName);
@@ -175,7 +175,6 @@ void deleteDirectory(vector<string>& directoryVec, string directoryName)
 	if (checkInt == -1)
 	{
 		cout << "--ERROR: Cannot delete, directory does not exist--" << endl;
-		exit(1); 
 	}
 	else
 	{
@@ -185,8 +184,12 @@ void deleteDirectory(vector<string>& directoryVec, string directoryName)
 		if (errorInt == -1)
 		{
 			cout << "--ERROR: Could not delete directory--" << endl;
-			exit(1);
 		}
+	}
+
+	if (globalWorkingDirectory == directoryName)
+	{
+		globalWorkingDirectory == "\0";
 	}
 
 	//update directory list file
@@ -207,7 +210,7 @@ void listDirectories(vector<string>& directoryVec)
 //prints working directory
 void printWorkingDirectory()
 {
-	cout << globalWorkingDirectory;
+	cout << "Working Directory: " << globalWorkingDirectory << endl;
 }
 
 //search vector to see if nameToCheck exists already, returns position in vector if ture, else returns -1
@@ -234,7 +237,6 @@ void changeWorkingDirectory(vector<string>& directoryVec, string newDirectory)
 	else
 	{
 		cout << "--ERROR: Could not change working directory, new directory invalid--" << endl;
-		exit(1);
 	}
 	
 }
@@ -247,7 +249,6 @@ void createTable(string tableName)
 	if (!fout.is_open())
 	{
 		cout << "--ERROR: Could not create table--" << endl;
-		exit(1);
 	}
 
 	fout.close();
