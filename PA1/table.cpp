@@ -1,4 +1,5 @@
 //cs457
+//table.h
 //Austin Emery, Mercedes Anderson, Nickolas Johnson
 //Project 1
 
@@ -12,7 +13,7 @@ Table::Table( const Table& givenTable )
 {
 	if( &givenTable != this )
 	{
-		cout << "Yes" << endl;
+		name = givenTable.name;
 	}
 }
 Table::~Table()

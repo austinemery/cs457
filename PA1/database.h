@@ -1,7 +1,8 @@
 //cs457
-//table.h
+//database.h
 //Austin Emery, Mercedes Anderson, Nickolas Johnson
 //Project 1
+
 
 #include <iostream>
 #include <string>
@@ -9,15 +10,12 @@
 
 using namespace std;
 
-class Table{
+class Database{
 
 	public:
-		Table(string);
-		Table(const Table&);
-		~Table();
-
-		//Data related
-
+		Database( string );
+		Database( const Database& );
+		~Database();
 
 	private:
 		string name;
