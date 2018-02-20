@@ -1,5 +1,17 @@
-# cs457
+# PA1
 
-## Group: Austin Emery, Mercedes Anderson, and Nickolas Johnson
+To Run:
+```
+  $ g++ database.cpp -o test
+  $ ./test
+```
 
-Repository for Database Management projects
+Testing Syntax Highlighting:
+
+```c++
+  char test;
+  for (int i = 0; i < 1234; i++)
+  {
+    //do something
+  }
+```  
