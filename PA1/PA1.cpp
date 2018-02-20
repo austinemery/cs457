@@ -74,7 +74,7 @@ int main()
 		else if (inputFromUser.find("CREATE") != string::npos)
 		{
 			cin >> inputFromUser;
-			if (inputFromUser.find("DIRECTORY") != string::npos)
+			if (inputFromUser.find("DATABASE") != string::npos)
 			{	
 				cin >> inputFromUser;
 				createDirectory(directoryList, inputFromUser.substr(0, inputFromUser.length() - 1));
@@ -87,7 +87,7 @@ int main()
 		else if (inputFromUser.find("DROP") != string::npos)
 		{
 			cin >> inputFromUser;
-			if (inputFromUser.find("DIRECTORY") != string::npos)
+			if (inputFromUser.find("DATABASE") != string::npos)
 			{	
 				cin >> inputFromUser;
 				deleteDirectory(directoryList, inputFromUser.substr(0, inputFromUser.length() - 1));
@@ -110,6 +110,61 @@ int main()
 
 	}while (inputFromUser != "exit" && inputFromUser != "quit");
 
+	updateDatabaseList(directoryList);
+}
+
+//read in the database list
+void readDatabaseList(vector<string>& directoryVec)
+{
+	string tempString;
+
+	ifstream fin;
+	fin.open("./data/databaseList.txt");
+	
+	if (!fin.is_open())
+	{
+		cout << "--ERROR: Could not open data/databaseList.txt to read--" << endl;
+		exit(1);
+	}
+	
+	while (fin >> tempString)
+	{
+		directoryVec.push_back(tempString);
+	}
+
+	fin.close();
+}
+
+//updates the directory list by overiding the file
+void updateDatabaseList(vector<string>& directoryVec)
+{
+	ofstream fout;
+	fout.open("./data/databaseList.txt");
+
+	if (!fout.is_open())
+	{
+		cout << "--ERROR: Could not open data/databaseList.txt to write--" << endl;
+		exit(1);
+	}
+
+	for (int i = 0; i < directoryVec.size(); i++)
+	{
+		fout << directoryVec[i] << endl;
+	}
+
+	fout.close();
+}
+
+//creates a directory with the name of directoryName
+void createDirectory(vector<string>& directoryVec, string directoryName)
+{
+	const int errorInt = system(("mkdir ./data/" + directoryName).c_str());
+	if (errorInt == -1)
+	{
+		cout << "--ERROR: Could not make directory--" << endl;
+		cout << "--The file path used was ./data--" << endl;
+	}
+	
 	directoryVec.push_back(directoryName);
 
 	globalWorkingDirectory = directoryName;
