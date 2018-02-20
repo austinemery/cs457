@@ -18,6 +18,8 @@ add table functionality
 
 using namespace std;
 
+string globalWorkingDirectory;
+
 void readDatabaseList(vector<string>&);
 
 void updateDatabaseList(vector<string>&);
@@ -26,41 +28,79 @@ void createDirectory(vector<string>&, string);
 
 void deleteDirectory(vector<string>&, string);
 
+void listDirectories(vector<string>&);
+
+void printWorkingDirectory();
+
 int directoryExistance(vector<string>&, string);
+
+void changeWorkingDirectory(vector<string>&, string);
+
+void createTable(string);
 
 int main()
 {
 	//general variables
 	string testString = "nuke";
 
-	//used to hold databast list info for running the program
+	string inputFromUser;
+
+	//used to hold database list info for running the program
 	vector<string> directoryList;
 
 	readDatabaseList(directoryList);
 
-	if (directoryExistance(directoryList, testString) != -1)
+	cout << endl << "This is a data management program!" << endl;
+	cout << "Type commands for list of commands!" << endl;
+
+	do
 	{
-		cout << "--ERROR: Directory " << testString << " already exists--" << endl; 
-	}
-	else
-	{
-		createDirectory(directoryList, testString);
-	}
+		cout << "Enter command: ";
+		cin >> inputFromUser;
 
-	
-/*
-	//print vector for testing
-	for (int i = 0; i < directoryList.size(); i++)
-	{
-		cout << directoryList[i] << endl;
-	}
-*/	
+		if (inputFromUser == "commands")
+		{
+			cout << endl << "--Command List--" << endl;
+			cout << "listDirectories - Prints all directories" << endl;
+			cout << "printWorkingDirectory - Prints working directory" << endl;
+			cout << "createDirectory <name> - Creates a new directory" << endl;
+			cout << "deleteDirectory <name> - Deletes a existing directory" << endl;
+			cout << "changeDirectory <name> - Changes the working directory" << endl;
+			cout << "createTable <name> - Creates a new table in the working directory" << endl;
+			cout << "deleteTable <name> - Deletes a exiting table in the working directory" << endl;
+			cout << "quit - ends the program" << endl;
+		}
+		else if (inputFromUser.find("listD") != string::npos)
+		{
+			listDirectories(directoryList);
+		}
+		else if (inputFromUser.find("printW") != string::npos)
+		{
+			printWorkingDirectory();
+		}
+		else if (inputFromUser.find("createD") != string::npos)
+		{
+			cin >> inputFromUser;
+			createDirectory(directoryList, inputFromUser);
+		}
+		else if (inputFromUser.find("deleteD") != string::npos)
+		{
+			cin >> inputFromUser;
+			deleteDirectory(directoryList, inputFromUser);
+		}
+		else if (inputFromUser.find("changeD") != string::npos)
+		{
+			cin >> inputFromUser;
+			changeWorkingDirectory(directoryList, inputFromUser);
+		}
+		else 
+		{
+			cout << "--ERROR: Command not found, type commands for list--" << endl;
+		}
 
-	//deleteDirectory(directoryList, testString);
+	}while (inputFromUser != "exit" && inputFromUser != "quit");
 
-	//testString = "inbound";
-
-	//createDirectory(directoryList, testString);
+	updateDatabaseList(directoryList);
 	
 }
 
@@ -78,7 +118,7 @@ void readDatabaseList(vector<string>& directoryVec)
 		exit(1);
 	}
 	
-	while(fin >> tempString)
+	while (fin >> tempString)
 	{
 		directoryVec.push_back(tempString);
 	}
@@ -119,6 +159,8 @@ void createDirectory(vector<string>& directoryVec, string directoryName)
 	
 	directoryVec.push_back(directoryName);
 
+	globalWorkingDirectory = directoryName;
+
 	updateDatabaseList(directoryVec);
 }
 
@@ -151,6 +193,23 @@ void deleteDirectory(vector<string>& directoryVec, string directoryName)
 	updateDatabaseList(directoryVec);
 }
 
+//prints all directories
+void listDirectories(vector<string>& directoryVec)
+{
+	cout << endl << "--Directory List--" << endl;
+	for (int i = 0; i < directoryVec.size(); i++)
+	{
+		cout << directoryVec[i] << endl;
+	}
+	cout << endl;
+}
+
+//prints working directory
+void printWorkingDirectory()
+{
+	cout << globalWorkingDirectory;
+}
+
 //search vector to see if nameToCheck exists already, returns position in vector if ture, else returns -1
 int directoryExistance(vector<string>& directoryVec, string nameToCheck)
 {
@@ -164,6 +223,43 @@ int directoryExistance(vector<string>& directoryVec, string nameToCheck)
 	
 	return -1;	
 }
+
+void changeWorkingDirectory(vector<string>& directoryVec, string newDirectory)
+{
+	//check if new is valid
+	if (directoryExistance(directoryVec, newDirectory) != -1)
+	{
+		globalWorkingDirectory = newDirectory;
+	}
+	else
+	{
+		cout << "--ERROR: Could not change working directory, new directory invalid--" << endl;
+		exit(1);
+	}
+	
+}
+
+void createTable(string tableName)
+{
+	ofstream fout;
+	fout.open(("./data/" + globalWorkingDirectory + "/" + tableName + ".txt").c_str());
+
+	if (!fout.is_open())
+	{
+		cout << "--ERROR: Could not create table--" << endl;
+		exit(1);
+	}
+
+	fout.close();
+}
+
+
+
+
+
+
+
+
 
 
 
