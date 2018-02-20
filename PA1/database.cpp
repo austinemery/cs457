@@ -1,7 +1,5 @@
 /*TODO:
 
-reading the databaseList.txt is only reading the last element, need to fix that
-
 make it so that the program get current working directory, instead of hardcoding the file path. We could use getcwd() while including unistd.h
 
 add table functionality
@@ -51,14 +49,14 @@ int main()
 		createDirectory(directoryList, testString);
 	}
 */
-	cout << endl << directoryList.size() << endl;
-
+	
+/*
 	//print vector for testing
 	for (int i = 0; i < directoryList.size(); i++)
 	{
 		cout << directoryList[i] << endl;
 	}
-	
+*/	
 
 	//deleteDirectory(directoryList, testString);
 
@@ -74,7 +72,7 @@ void readDatabaseList(vector<string>& directoryVec)
 	string tempString;
 
 	ifstream fin;
-	fin.open("data/databaseList.txt", ifstream::in);
+	fin.open("./data/databaseList.txt");
 	
 	if (!fin.is_open())
 	{
@@ -82,10 +80,9 @@ void readDatabaseList(vector<string>& directoryVec)
 		exit(1);
 	}
 	
-	while(fin >> tempString);
+	while(fin >> tempString)
 	{
 		directoryVec.push_back(tempString);
-		cout << tempString << endl;
 	}
 
 	fin.close();
