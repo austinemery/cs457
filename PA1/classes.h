@@ -21,14 +21,14 @@ class Table{
 		string getName();
 		string getDatabaseName();
 		void printData();
-		void addCol( string );
+		void addMetaCol( string );
 
-		bool setMeta( string );		//
+		bool setMeta( string );		//sets meta data and returns status
 
 	private:
 		string name;				//Name of table
 		string databaseName;		//Name of associated database
-		vector<string> metaData;	//
+		vector<string> metaData;	//vector of the column types
 };
 
 class Database{
@@ -42,9 +42,11 @@ class Database{
 		string getName();
 		bool hasTable( string );
 		void addTable( Table& );
+		void deleteTable( string );
+		void alterTable( string , string , string );
 
 	private:
 		string name;				//name of table
-		vector<string> metaData;	//
+		vector<string> metaData;	//Name, creation time, owner, etc (info given by user)
 		vector<Table> tableData;	//vector containing tables
 };

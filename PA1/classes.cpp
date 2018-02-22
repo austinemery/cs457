@@ -34,9 +34,19 @@ Table::~Table()
 }
 void Table::printData()
 {
-	
+	for( int index = 0 ; index < metaData.size() ; index++ )
+	{
+		if( index == ( metaData.size() - 1 ) )
+		{
+			cout << metaData[index] << endl;
+		}
+		else
+		{
+			cout << metaData[index] << " | ";			
+		}
+	}
 }
-void Table::addCol( string givenCol )
+void Table::addMetaCol( string givenCol )
 {
 	metaData.push_back(givenCol);
 }
@@ -78,6 +88,20 @@ void Database::addTable( Table& givenTable )
 {
 	tableData.push_back( givenTable );
 }
+void Database::deleteTable( string tableToDelete )
+{
+	int tableIndex = 0;
+
+	for( tableIndex = 0 ; tableIndex < tableData.size() ; tableIndex++ )
+	{
+		if( whichTable == tableData[tableIndex].getName() )
+		{
+			break;
+		}
+	}
+
+	tableData.erase(tableIndex);
+}
 bool Database::hasTable( string requestedTable )
 {
 	bool flag = false;
@@ -91,4 +115,21 @@ bool Database::hasTable( string requestedTable )
 	}
 
 	return flag;
+}
+void Database::alterTable( string command, string whichTable , string givenMeta )
+{
+	int tableIndex = 0;
+
+	for( tableIndex = 0 ; tableIndex < tableData.size() ; tableIndex++ )
+	{
+		if( whichTable == tableData[tableIndex].getName() )
+		{
+			break;
+		}
+	}
+
+	if( command == "ADD" )
+	{
+		tableData[tableIndex].addMetaCol( givenMeta );
+	}
 }
