@@ -9,10 +9,15 @@
  * Class Implementation
  *       TABLE
  */
-Table::Table( string givenName , string givenDatabaseName )
+Table::Table( string givenName , string givenDatabaseName , vector<string> givenMeta )
 {
 	name = givenName;
 	databaseName = givenDatabaseName;
+
+	for( int index = 0 ; index < givenMeta.size() ; index++ )
+	{
+		metaData.push_back(givenMeta[index]);
+	}
 }
 Table::Table( const Table& givenTable )
 {
@@ -23,11 +28,17 @@ Table::Table( const Table& givenTable )
 }
 Table::~Table()
 {
+	name = '\0';
+	databaseName = '\0';
 	metaData.clear();	
 }
-bool Table::setMeta( string givenMeta )
+void Table::printData()
 {
-
+	
+}
+void Table::addCol( string givenCol )
+{
+	metaData.push_back(givenCol);
 }
 string Table::getName()
 {
@@ -56,9 +67,28 @@ Database::Database( const Database& givenDatabase )
 }
 Database::~Database()
 {
-
+	metaData.clear();
+	tableData.clear();
 }
 string Database::getName()
 {
 	return name;
+}
+void Database::addTable( Table& givenTable )
+{
+	tableData.push_back( givenTable );
+}
+bool Database::hasTable( string requestedTable )
+{
+	bool flag = false;
+
+	for( int index = 0 ; index < tableData.size() ; index++ )
+	{
+		if( tableData[index].getName() == requestedTable )
+		{
+			flag = true;
+		}
+	}
+
+	return flag;
 }

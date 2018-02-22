@@ -12,13 +12,16 @@ using namespace std;
 class Table{
 
 	public:
-		Table( string , string );	//constructor
-		Table( const Table& );		//copy constructor
-		~Table();					//desctructor
+
+		Table( string , string , vector<string> );
+		Table( const Table& );
+		~Table();
 
 		//Data related
-		string getName();			//returns name of table
-		string getDatabaseName();	//returns name of database
+		string getName();
+		string getDatabaseName();
+		void printData();
+		void addCol( string );
 
 		bool setMeta( string );		//sets meta data and returns status
 
@@ -36,8 +39,9 @@ class Database{
 		~Database();				//desctructor
 
 		//Data related
-		string getName();			//Returns name of database
-		bool hasTable();			//If the database holds any table(s) return 1
+		string getName();
+		bool hasTable( string );
+		void addTable( Table& );
 
 	private:
 		string name;				//name of table
