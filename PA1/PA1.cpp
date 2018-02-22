@@ -16,8 +16,6 @@ using namespace std;
 
 int globalWorkingDatabase;	//int denoting database currently in use
 
-
-
 /**	@fn void readDatabaseList
 *	@brief read in the database list
 *	@pre requires existing database(s)
@@ -70,7 +68,7 @@ void printWorkingDatabase(vector<Database>& databaseVec);
 *	@brief search vector to see if nameToCheck exists already, returns position in vector if ture, else returns -1
 *	@pre requires existing database(s)
 *	@post no change 
-*	@return int
+*	@return int - position of database if it does exist
 */
 int databaseExistance(vector<Database>& databaseVec, string nameToCheck);
 
