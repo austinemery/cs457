@@ -89,8 +89,23 @@ void changeWorkingDatabase(vector<Database>& databaseVec, string newDatabase);
 *	@return void
 */
 void createTable(vector<Database>& databaseVec, string tableName, vector<string> givenMetaData);
+
+/**	@fn void deleteTable
+*	@brief deletes current table
+*	@pre requires existing table(s)
+*	@post removes table from vector
+*	@return void
+*/
 void deleteTable( vector<Database>& databaseVec , string tableName );
-void alterTable( vector<Database>& databaseList , string nameOfTable , string command , string metaDataInQuestion );
+
+/**	@fn void alterTable
+*	@brief edits table based on command
+*	@pre requires existing table(s)
+*	@post edits table metadata in vector
+*	@return void
+*/
+void alterTable( vector<Database>& databaseVec , string nameOfTable , string command , string metaDataInQuestion );
+
 int main()
 {
 	//general variables
@@ -166,7 +181,7 @@ int main()
 					inputFromUser = inputFromUser.substr(inputFromUser.find(",") + 1);
 				}
 
-				userGivenMetaData.push_back(inputFromUser.substr(1, inputFromUser.find(")") - 1));
+				userGivenMetaData.push_back(inputFromUser.substr(1, inputFromUser.find(")")));
 
 				createTable(databaseList, tempTableName , userGivenMetaData);
 			}		
@@ -422,6 +437,12 @@ void createTable(vector<Database>& databaseVec, string tableName, vector<string>
 			if (!fout.is_open())
 			{
 				cout << "--ERROR: Could not create table--" << endl;
+			}
+
+			//output data to table	
+			for (int i = 0; i < givenMetaData.size(); ++i)
+			{
+				fout << givenMetaData[i] << endl;
 			}
 
 			fout.close();
