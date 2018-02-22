@@ -12,16 +12,15 @@ using namespace std;
 class Table{
 
 	public:
-		Table( string , string );
+		Table( string , string , vector<string> );
 		Table( const Table& );
 		~Table();
 
 		//Data related
 		string getName();
 		string getDatabaseName();
-
-		bool setMeta( string );
-
+		void printData();
+		void addCol( string );
 	private:
 		string name;
 		string databaseName;
@@ -37,7 +36,8 @@ class Database{
 
 		//Data related
 		string getName();
-		bool hasTable();
+		bool hasTable( string );
+		void addTable( Table& );
 
 	private:
 		string name;

@@ -36,7 +36,7 @@ int directoryExistance(vector<Database>& databaseVec, string nameToCheck);
 
 void changeWorkingDirectory(vector<Database>& databaseVec, string newDirectory);
 
-void createTable(vector<Database>& databaseVec, string tableName);
+void createTable(vector<Database>& databaseVec, string tableName, vector<string> givenMetaData);
 
 int main()
 {
@@ -87,9 +87,10 @@ int main()
 			}
 			else if (inputFromUser.find("TABLE") != string::npos)
 			{
+				vector<string> userGivenMetaData;
 				//do something
 				cin >> inputFromUser;
-				createTable(databaseList, inputFromUser.substr(0, inputFromUser.length() - 1));
+				createTable(databaseList, inputFromUser , userGivenMetaData);
 			}		
 		}
 		else if (inputFromUser.find("DROP") != string::npos)
@@ -136,14 +137,14 @@ void readDatabaseList(vector<Database>& databaseVec)
 	}
 	
 	//if the file is not empty.
-	if( !fin.eof() )
-	{
+	//if( !fin.eof() )
+	//{
 		while (fin >> tempString)
 		{
 			Database holdDatabase(tempString);
 			databaseVec.push_back( holdDatabase );
 		}
-	}
+	//}
 
 	fin.close();
 }
@@ -191,7 +192,7 @@ void createDirectory(vector<Database>& databaseVec, string directoryName)
 		cout << "Database " << databaseVec[databaseVec.size()-1].getName() << " created." << endl;
 	} else
 	{
-		cout << "!Failed to create database db_1 because it already exists." << endl;
+		cout << "--!Failed to create database db_1 because it already exists." << endl;
 	}
 
 }
@@ -206,7 +207,7 @@ void deleteDirectory(vector<Database>& databaseVec, string directoryName)
 
 	if (checkInt == -1)
 	{
-		cout << "!Failed to delete "<< directoryName << " because it does not exist." << endl;
+		cout << "--!Failed to delete "<< directoryName << " because it does not exist." << endl;
 	}
 	else
 	{
@@ -247,7 +248,7 @@ void printWorkingDirectory(vector<Database>& databaseVec)
 		cout << "Working Directory: " << databaseVec[globalWorkingDirectory].getName() << endl;		
 	} else
 	{
-		cout << "!Failed, there is no working directory." << endl;
+		cout << "--!Failed, there is no working directory." << endl;
 	}
 
 }
@@ -275,28 +276,40 @@ void changeWorkingDirectory(vector<Database>& databaseVec, string newDirectory)
 	}
 	else
 	{
-		cout << "!Failed, no such database." << endl;
+		cout << "--!Failed, no such database." << endl;
 	}
 	
 }
 
-void createTable(vector<Database>& databaseVec, string tableName)
+void createTable(vector<Database>& databaseVec, string tableName, vector<string> givenMetaData)
 {
+	//CREATE TABLE tbl_1 (a1 int, a2 varchar(20));
 	if( globalWorkingDirectory != -1 )
 	{
-
-		ofstream fout;
-		fout.open(("./data/" + databaseVec[globalWorkingDirectory].getName() + "/" + tableName + ".txt").c_str());
-
-		if (!fout.is_open())
+		if( !databaseVec[globalWorkingDirectory].hasTable(tableName) )
 		{
-			cout << "--ERROR: Could not create table--" << endl;
-		}
+			ofstream fout;
+			fout.open(("./data/" + databaseVec[globalWorkingDirectory].getName() + "/" + tableName + ".txt").c_str());
 
-		fout.close();		
-	} else
+			if (!fout.is_open())
+			{
+				cout << "--ERROR: Could not create table--" << endl;
+			}
+
+			fout.close();
+		
+			Table holdTable( tableName , databaseVec[globalWorkingDirectory].getName() , givenMetaData );
+			databaseVec[globalWorkingDirectory].addTable( holdTable );
+		}
+		else
+		{
+			cout << "--!Failed to create table " << tableName << " because it already exists." << endl;
+		}
+		
+	} 
+	else
 	{
-		cout << "!Failed, there is no working database." << endl;
+		cout << "--!Failed, there is no working database." << endl;
 	}
 
 }
