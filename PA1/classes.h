@@ -23,12 +23,12 @@ class Table{
 		void printData();
 		void addMetaCol( string );
 
-		bool setMeta( string );		//
+		bool setMeta( string );		//sets meta data and returns status
 
 	private:
 		string name;				//Name of table
 		string databaseName;		//Name of associated database
-		vector<string> metaData;	//
+		vector<string> metaData;	//vector of the column types
 };
 
 class Database{
@@ -47,6 +47,6 @@ class Database{
 
 	private:
 		string name;				//name of table
-		vector<string> metaData;	//
+		vector<string> metaData;	//Name, creation time, owner, etc (info given by user)
 		vector<Table> tableData;	//vector containing tables
 };
