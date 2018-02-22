@@ -2,16 +2,13 @@
 
 To Run:
 ```
-  $ g++ database.cpp -o test
-  $ ./test
+  $ make
+  $ ./PA1
 ```
 
-Testing Syntax Highlighting:
+For a list of commands do while running:
+```
+  $ COMMANDS
+```
 
-```c++
-  char test;
-  for (int i = 0; i < 1234; i++)
-  {
-    //do something
-  }
-```  
+# Austin is the bees knees
