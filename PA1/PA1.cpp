@@ -97,6 +97,8 @@ int main()
 
 	string inputFromUser;
 
+	string tempTableName;
+
 	//used to hold database list info for running the program
 	vector<Database> databaseList;
 	readDatabaseList(databaseList);
@@ -106,7 +108,6 @@ int main()
 
 	do
 	{
-		cout << "Enter command: ";
 		cin >> inputFromUser;
 
 		if (inputFromUser == "COMMANDS")
@@ -132,17 +133,41 @@ int main()
 		else if (inputFromUser.find("CREATE") != string::npos)
 		{
 			cin >> inputFromUser;
+			
 			if (inputFromUser.find("DATABASE") != string::npos)
 			{	
 				cin >> inputFromUser;
 				createDatabase(databaseList, inputFromUser.substr(0, inputFromUser.length() - 1));
 			}
-			else if (inputFromUser.find("TABLE") != string::npos)
+			else if (inputFromUser.find("TABLE") != string::npos) //CREATE TABLE tbl_1 (a1 int, a2 varchar(20)); 
 			{
+				cin >> tempTableName;
+				
 				vector<string> userGivenMetaData;
-				//do something
-				cin >> inputFromUser;
-				createTable(databaseList, inputFromUser , userGivenMetaData);
+				int commaCount = 0;
+
+				getline(cin, inputFromUser);
+
+				//find how many commas exist
+				for (int i = 0; i < inputFromUser.size(); ++i)
+				{
+					if (inputFromUser[i] == ',')
+					{
+						commaCount++;
+					}
+				}
+
+				//get data parsed
+				inputFromUser = inputFromUser.substr(1);
+				for (int i = 0; i < commaCount; ++i)
+				{
+					userGivenMetaData.push_back(inputFromUser.substr(1, inputFromUser.find(",") - 1));
+					inputFromUser = inputFromUser.substr(inputFromUser.find(",") + 1);
+				}
+
+				userGivenMetaData.push_back(inputFromUser.substr(1, inputFromUser.find(")") - 1));
+
+				createTable(databaseList, tempTableName , userGivenMetaData);
 			}		
 		}
 		else if (inputFromUser.find("DROP") != string::npos)
@@ -336,8 +361,6 @@ void changeWorkingDatabase(vector<Database>& databaseVec, string newDatabase)
 
 void createTable(vector<Database>& databaseVec, string tableName, vector<string> givenMetaData)
 {
-
-	//CREATE TABLE tbl_1 (a1 int, a2 varchar(20));
 	if( globalWorkingDatabase != -1 )
 	{
 		if( !databaseVec[globalWorkingDatabase].hasTable(tableName) )
