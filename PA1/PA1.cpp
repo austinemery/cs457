@@ -90,6 +90,7 @@ void changeWorkingDatabase(vector<Database>& databaseVec, string newDatabase);
 */
 void createTable(vector<Database>& databaseVec, string tableName, vector<string> givenMetaData);
 void deleteTable( vector<Database>& databaseVec , string tableName );
+void alterTable( vector<Database>& databaseList , string nameOfTable , string command , string metaDataInQuestion );
 int main()
 {
 	//general variables
@@ -185,6 +186,21 @@ int main()
 				deleteTable(databaseList, inputFromUser.substr(0,inputFromUser.length()-1));
 			}	
 		}
+		else if (inputFromUser.find("SELECT") != string::npos)
+		{
+			cin >> inputFromUser; // toss * we'll use this later
+			cin >> inputFromUser; // toss FROM we'll use this later
+			cin >> inputFromUser; // Name of table
+
+			if( databaseList[globalWorkingDatabase].hasTable(inputFromUser))
+			{
+				databaseList[globalWorkingDatabase].printTable(inputFromUser);
+			}
+			else
+			{
+				cout << "--!Failed table " << inputFromUser << " does not exist." << endl;
+			}
+		}
 		else if (inputFromUser.find("USE") != string::npos)
 		{
 			cin >> inputFromUser;
@@ -209,7 +225,7 @@ int main()
 				alterTable( databaseList , nameOfTable , command , metaDataInQuestion );
 			}
 		}
-		else if ( inputFromUser != ".EXIT" )
+		else if ( inputFromUser == ".EXIT" )
 		{
 			//not supposed to do anything! this way we can leave the loop without an issue.
 			cout << "All done." << endl;
@@ -412,6 +428,9 @@ void createTable(vector<Database>& databaseVec, string tableName, vector<string>
 		
 			Table holdTable( tableName , databaseVec[globalWorkingDatabase].getName() , givenMetaData );
 			databaseVec[globalWorkingDatabase].addTable( holdTable );
+
+			databaseVec[globalWorkingDatabase].printTable(tableName);
+			cout << "Table " << tableName << " created." << endl;
 		}
 		else
 		{

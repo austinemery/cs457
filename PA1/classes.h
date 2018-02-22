@@ -44,6 +44,7 @@ class Database{
 		void addTable( Table& );
 		void deleteTable( string );
 		void alterTable( string , string , string );
+		void printTable( string );
 
 	private:
 		string name;				//name of table
