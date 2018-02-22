@@ -89,6 +89,13 @@ void changeWorkingDatabase(vector<Database>& databaseVec, string newDatabase);
 *	@return void
 */
 void createTable(vector<Database>& databaseVec, string tableName, vector<string> givenMetaData);
+
+/**	@fn void deleteTable
+*	@brief deletes current table
+*	@pre requires existing table(s)
+*	@post removes table from vector
+*	@return void
+*/
 void deleteTable( vector<Database>& databaseVec , string tableName );
 void alterTable( vector<Database>& databaseVec , string nameOfTable , string command , string metaDataInQuestion );
 int main()
