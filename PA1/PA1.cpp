@@ -10,6 +10,7 @@
 #include <vector>
 #include <fstream>
 #include <cstdlib>
+#include <time.h>
 #include "classes.h"
 
 using namespace std;
@@ -179,8 +180,15 @@ int main()
 					inputFromUser = inputFromUser.substr(inputFromUser.find(",") + 1);
 				}
 
-				userGivenMetaData.push_back(inputFromUser.substr(1, inputFromUser.find(")")));
-
+				if (inputFromUser.find_first_of(")") != inputFromUser.find_last_of(")")) //if there are 2 ')'
+				{
+					cout << "TEHRE ARE 2 DUDE" << endl;
+					userGivenMetaData.push_back(inputFromUser.substr(1, inputFromUser.find(")")));
+				}
+				else
+				{
+					userGivenMetaData.push_back(inputFromUser.substr(1, inputFromUser.find(")") - 1));
+				}
 				createTable(databaseList, tempTableName , userGivenMetaData);
 			}		
 		}
@@ -205,13 +213,15 @@ int main()
 			cin >> inputFromUser; // toss FROM we'll use this later
 			cin >> inputFromUser; // Name of table
 
+			inputFromUser = inputFromUser.substr(0, inputFromUser.length() - 1);
+
 			if( databaseList[globalWorkingDatabase].hasTable(inputFromUser))
 			{
 				databaseList[globalWorkingDatabase].printTable(inputFromUser);
 			}
 			else
 			{
-				cout << "--!Failed table " << inputFromUser << " does not exist." << endl;
+				cout << "--!Failed to query table " << inputFromUser << " because it does not exist." << endl;
 			}
 		}
 		else if (inputFromUser.find("USE") != string::npos)
@@ -233,7 +243,7 @@ int main()
 				cin >> metaDataInQuestion;
 				cin >> inputFromUser;
 
-				metaDataInQuestion = metaDataInQuestion + " " + inputFromUser.substr(0, inputFromUser.length()-1);
+				metaDataInQuestion = metaDataInQuestion + " " + inputFromUser.substr(0, inputFromUser.length()-1); 
 
 				alterTable( databaseList , nameOfTable , command , metaDataInQuestion );
 			}
@@ -301,6 +311,7 @@ void createDatabase(vector<Database>& databaseVec, string databaseName)
 {
 	if( databaseExistance(databaseVec,databaseName) == -1 )
 	{
+		//physical side
 		const int errorInt = system(("mkdir ./data/" + databaseName).c_str());
 		if (errorInt == -1)
 		{
@@ -308,6 +319,23 @@ void createDatabase(vector<Database>& databaseVec, string databaseName)
 			cout << "--The file path used was ./data--" << endl;
 		}
 		
+		//create database info file
+		time_t rawtime;
+  		struct tm * timeinfo;
+
+		time (&rawtime);
+		timeinfo = localtime (&rawtime);
+
+		ofstream fout;
+		fout.open(("./data/" + databaseName + "/Info").c_str());
+
+		fout << "Database Name: " << databaseName << endl;
+		fout << "Author: User" << endl;
+		fout << "Date Created: " << asctime(timeinfo);
+		fout << endl << "--List of Tables--" << endl;
+		fout.close();
+
+		//program side
 		Database holdDatabase(databaseName);
 
 		databaseVec.push_back(holdDatabase);
@@ -316,10 +344,11 @@ void createDatabase(vector<Database>& databaseVec, string databaseName)
 
 		updateDatabaseList(databaseVec);
 
-		cout << "Database " << databaseVec[databaseVec.size()-1].getName() << " created." << endl;
-	} else
+		cout << "--Database " << databaseVec[databaseVec.size()-1].getName() << " created." << endl;
+	} 
+	else
 	{
-		cout << "--!Failed to create database db_1 because it already exists." << endl;
+		cout << "--!Failed to create database " << databaseName << " because it already exists." << endl;
 	}
 
 }
@@ -403,6 +432,7 @@ void changeWorkingDatabase(vector<Database>& databaseVec, string newDatabase)
 	if (databaseExistance(databaseVec, newDatabase) != -1)
 	{
 		globalWorkingDatabase = databaseExistance(databaseVec, newDatabase);
+		cout << "--Using database " << newDatabase << "." << endl;
 	}
 	else
 	{
@@ -416,7 +446,7 @@ void deleteTable( vector<Database>& databaseVec , string tableName )
 	{
 		databaseVec[globalWorkingDatabase].deleteTable(tableName);
 		system(("rm -r ./data/" + databaseVec[globalWorkingDatabase].getName() + "/" + tableName).c_str());
-		cout << "-- Table " << tableName << " deleted." << endl;
+		cout << "--Table " << tableName << " deleted." << endl;
 	}
 	else
 	{
@@ -449,8 +479,8 @@ void createTable(vector<Database>& databaseVec, string tableName, vector<string>
 			Table holdTable( tableName , databaseVec[globalWorkingDatabase].getName() , givenMetaData );
 			databaseVec[globalWorkingDatabase].addTable( holdTable );
 
-			databaseVec[globalWorkingDatabase].printTable(tableName);
-			cout << "Table " << tableName << " created." << endl;
+			//databaseVec[globalWorkingDatabase].printTable(tableName);
+			cout << "--Table " << tableName << " created." << endl;
 		}
 		else
 		{
@@ -470,10 +500,16 @@ void alterTable( vector<Database>& databaseVec , string nameOfTable , string com
 	{
 		databaseVec[globalWorkingDatabase].alterTable( command , nameOfTable , metaDataInQuestion );
 
+		//to file
+		ofstream fout;
+		fout.open(("./data/" + databaseVec[globalWorkingDatabase].getName() + "/" + nameOfTable).c_str(), ios::app);
+		fout << metaDataInQuestion << endl;
+		fout.close();
+
 		cout << "Table " << nameOfTable << " has been altered." << endl;
 	}
 	else
 	{
-		cout << "-- !Failed to query table " << nameOfTable << " because it does not exist." << endl;
+		cout << "--!Failed to query table " << nameOfTable << " because it does not exist." << endl;
 	}
 }
