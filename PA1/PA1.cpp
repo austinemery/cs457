@@ -89,7 +89,7 @@ void changeWorkingDatabase(vector<Database>& databaseVec, string newDatabase);
 *	@return void
 */
 void createTable(vector<Database>& databaseVec, string tableName, vector<string> givenMetaData);
-
+void deleteTable( vector<Database>& databaseVec , string tableName );
 int main()
 {
 	//general variables
@@ -156,6 +156,8 @@ int main()
 			else if (inputFromUser.find("TABLE") != string::npos)
 			{
 				//do something
+				cin >> inputFromUser;
+				deleteTable(databaseList, inputFromUser.substr(0,inputFromUser.length()-1));
 			}	
 		}
 		else if (inputFromUser.find("USE") != string::npos)
@@ -163,13 +165,36 @@ int main()
 			cin >> inputFromUser;
 			changeWorkingDatabase(databaseList, inputFromUser.substr(0, inputFromUser.length() - 1));
 		}
-		else if (inputFromUser == "quit" || inputFromUser == "exit"){}
+		else if (inputFromUser.find("ALTER") != string::npos)
+		{
+			cin >> inputFromUser;
+			if( inputFromUser.find("TABLE") != string::npos)
+			{
+				string nameOfTable;
+				string command;
+				string metaDataInQuestion;
+				//ALTER TABLE tbl_1 ADD a3 float;
+				cin >> nameOfTable;
+				cin >> command;
+				cin >> metaDataInQuestion;
+				cin >> inputFromUser;
+
+				metaDataInQuestion = metaDataInQuestion + " " + inputFromUser.substr(0, inputFromUser.length()-1);
+
+				alterTable( databaseList , nameOfTable , command , metaDataInQuestion );
+			}
+		}
+		else if ( inputFromUser != ".EXIT" )
+		{
+			//not supposed to do anything! this way we can leave the loop without an issue.
+			cout << "All done." << endl;
+		}
 		else 
 		{
 			cout << "--ERROR: Command not found, type commands for list--" << endl;
 		}
 
-	}while (inputFromUser != "exit" && inputFromUser != "quit");
+	}while ( inputFromUser != ".EXIT" );
 
 	updateDatabaseList(databaseList);
 }
@@ -188,16 +213,12 @@ void readDatabaseList(vector<Database>& databaseVec)
 		exit(1);
 	}
 	
-	//if the file is not empty.
-	//if( !fin.eof() )
-	//{
-		while (fin >> tempString)
-		{
-			Database holdDatabase(tempString);
-			databaseVec.push_back( holdDatabase );
-		}
-	//}
-
+	while (fin >> tempString)
+	{
+		Database holdDatabase(tempString);
+		databaseVec.push_back( holdDatabase );
+	}
+	
 	fin.close();
 }
 
@@ -270,6 +291,8 @@ void deleteDatabase(vector<Database>& databaseVec, string databaseName)
 		{
 			cout << "--ERROR: Could not delete database--" << endl;
 		}
+
+		cout << "--Database " << databaseName << " deleted." << endl;
 	}
 
 	if (globalWorkingDatabase == checkInt || (databaseVec.size() == 0) )
@@ -333,11 +356,23 @@ void changeWorkingDatabase(vector<Database>& databaseVec, string newDatabase)
 	}
 	
 }
-
+void deleteTable( vector<Database>& databaseVec , string tableName )
+{
+	if( databaseVec[globalWorkingDatabase].hasTable(tableName) )
+	{
+		databaseVec[globalWorkingDatabase].deleteTable(tableName);
+		cout << "-- Table " << tableName << " deleted." << endl;
+	}
+	else
+	{
+		cout << "--!Failed to delete " << tableName << " because it does not exist." << endl;
+	}
+}
 void createTable(vector<Database>& databaseVec, string tableName, vector<string> givenMetaData)
 {
 
 	//CREATE TABLE tbl_1 (a1 int, a2 varchar(20));
+
 	if( globalWorkingDatabase != -1 )
 	{
 		if( !databaseVec[globalWorkingDatabase].hasTable(tableName) )
@@ -366,4 +401,17 @@ void createTable(vector<Database>& databaseVec, string tableName, vector<string>
 		cout << "--!Failed, there is no working database." << endl;
 	}
 
+}
+void alterTable( vector<Database>& databaseVec , string nameOfTable , string command , string metaDataInQuestion )
+{
+	if( databaseVec[globalWorkingDatabase].hasTable(nameOfTable) )
+	{
+		databaseVec[globalWorkingDatabase].alterTable( command , nameOfTable , metaDataInQuestion );
+
+		cout << "Table " << nameOfTable << " has been altered." << endl;
+	}
+	else
+	{
+		cout << "-- !Failed to query table " << nameOfTable << " because it does not exist." << endl;
+	}
 }

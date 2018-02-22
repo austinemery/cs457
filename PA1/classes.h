@@ -21,7 +21,7 @@ class Table{
 		string getName();
 		string getDatabaseName();
 		void printData();
-		void addCol( string );
+		void addMetaCol( string );
 
 		bool setMeta( string );		//
 
@@ -42,6 +42,8 @@ class Database{
 		string getName();
 		bool hasTable( string );
 		void addTable( Table& );
+		void deleteTable( string );
+		void alterTable( string , string , string );
 
 	private:
 		string name;				//name of table
