@@ -394,6 +394,7 @@ void deleteTable( vector<Database>& databaseVec , string tableName )
 	if( databaseVec[globalWorkingDatabase].hasTable(tableName) )
 	{
 		databaseVec[globalWorkingDatabase].deleteTable(tableName);
+		system(("rm -r ./data/" + databaseVec[globalWorkingDatabase].getName() + "/" + tableName).c_str());
 		cout << "-- Table " << tableName << " deleted." << endl;
 	}
 	else
@@ -409,7 +410,7 @@ void createTable(vector<Database>& databaseVec, string tableName, vector<string>
 		if( !databaseVec[globalWorkingDatabase].hasTable(tableName) )
 		{
 			ofstream fout;
-			fout.open(("./data/" + databaseVec[globalWorkingDatabase].getName() + "/" + tableName + ".txt").c_str());
+			fout.open(("./data/" + databaseVec[globalWorkingDatabase].getName() + "/" + tableName).c_str());
 
 			if (!fout.is_open())
 			{
