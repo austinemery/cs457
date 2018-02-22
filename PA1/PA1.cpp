@@ -12,7 +12,7 @@
 
 using namespace std;
 
-string globalWorkingDirectory;
+int globalWorkingDirectory;
 
 //read in the database list
 void readDatabaseList(vector<Database>& databaseVec);
@@ -30,13 +30,13 @@ void deleteDirectory(vector<Database>& databaseVec, string directoryName);
 void listDirectories(vector<Database>& databaseVec);
 
 //prints working directory
-void printWorkingDirectory();
+void printWorkingDirectory(vector<Database>& databaseVec);
 //search vector to see if nameToCheck exists already, returns position in vector if ture, else returns -1
 int directoryExistance(vector<Database>& databaseVec, string nameToCheck);
 
 void changeWorkingDirectory(vector<Database>& databaseVec, string newDirectory);
 
-void createTable(string tableName);
+void createTable(vector<Database>& databaseVec, string tableName);
 
 int main()
 {
@@ -63,10 +63,10 @@ int main()
 			cout << "listDirectories - Prints all directories" << endl;
 			cout << "printWorkingDirectory - Prints working directory" << endl;
 			cout << "CREATE DATABASE <name> - Creates a new database" << endl;
-			cout << "DROP DATABASE <name> - Deletes a existing database" << endl;
+			cout << "DROP DATABASE <name> - Deletes an existing database" << endl;
+			cout << "CREATE TABLE <name> - Creates a new table in the working database" << endl;
+			cout << "DROP TABLE <name> - Deletes an existing table in the working database" << endl;
 			cout << "USE <name> - Changes the working directory" << endl;
-			cout << "createTable <name> - Creates a new table in the working directory" << endl;
-			cout << "deleteTable <name> - Deletes a exiting table in the working directory" << endl;
 			cout << "quit - ends the program" << endl;
 		}
 		else if (inputFromUser.find("listD") != string::npos)
@@ -75,7 +75,7 @@ int main()
 		}
 		else if (inputFromUser.find("printW") != string::npos)
 		{
-			printWorkingDirectory();
+			printWorkingDirectory(databaseList);
 		}
 		else if (inputFromUser.find("CREATE") != string::npos)
 		{
@@ -88,6 +88,8 @@ int main()
 			else if (inputFromUser.find("TABLE") != string::npos)
 			{
 				//do something
+				cin >> inputFromUser;
+				createTable(databaseList, inputFromUser.substr(0, inputFromUser.length() - 1));
 			}		
 		}
 		else if (inputFromUser.find("DROP") != string::npos)
@@ -143,7 +145,6 @@ void readDatabaseList(vector<Database>& databaseVec)
 		}
 	}
 
-
 	fin.close();
 }
 
@@ -183,7 +184,7 @@ void createDirectory(vector<Database>& databaseVec, string directoryName)
 
 		databaseVec.push_back(holdDatabase);
 
-		globalWorkingDirectory = databaseVec[databaseVec.size()-1].getName();
+		globalWorkingDirectory = databaseVec.size()-1;
 
 		updateDatabaseList(databaseVec);
 
@@ -218,9 +219,9 @@ void deleteDirectory(vector<Database>& databaseVec, string directoryName)
 		}
 	}
 
-	if (globalWorkingDirectory == directoryName)
+	if (globalWorkingDirectory == checkInt || (databaseVec.size() == 0) )
 	{
-		globalWorkingDirectory = '\0';
+		globalWorkingDirectory = -1;
 	}
 
 	//update directory list file
@@ -239,9 +240,16 @@ void listDirectories(vector<Database>& databaseVec)
 }
 
 //prints working directory
-void printWorkingDirectory()
+void printWorkingDirectory(vector<Database>& databaseVec)
 {
-	cout << "Working Directory: " << globalWorkingDirectory << endl;
+	if( databaseVec.size() != 0 )
+	{
+		cout << "Working Directory: " << databaseVec[globalWorkingDirectory].getName() << endl;		
+	} else
+	{
+		cout << "!Failed, there is no working directory." << endl;
+	}
+
 }
 
 //search vector to see if nameToCheck exists already, returns position in vector if ture, else returns -1
@@ -263,24 +271,32 @@ void changeWorkingDirectory(vector<Database>& databaseVec, string newDirectory)
 	//check if new is valid
 	if (directoryExistance(databaseVec, newDirectory) != -1)
 	{
-		globalWorkingDirectory = newDirectory;
+		globalWorkingDirectory = directoryExistance(databaseVec, newDirectory);
 	}
 	else
 	{
-		cout << "--ERROR: Could not change working directory, new directory invalid--" << endl;
+		cout << "!Failed, no such database." << endl;
 	}
 	
 }
 
-void createTable(string tableName)
+void createTable(vector<Database>& databaseVec, string tableName)
 {
-	ofstream fout;
-	fout.open(("./data/" + globalWorkingDirectory + "/" + tableName + ".txt").c_str());
-
-	if (!fout.is_open())
+	if( globalWorkingDirectory != -1 )
 	{
-		cout << "--ERROR: Could not create table--" << endl;
+
+		ofstream fout;
+		fout.open(("./data/" + databaseVec[globalWorkingDirectory].getName() + "/" + tableName + ".txt").c_str());
+
+		if (!fout.is_open())
+		{
+			cout << "--ERROR: Could not create table--" << endl;
+		}
+
+		fout.close();		
+	} else
+	{
+		cout << "!Failed, there is no working database." << endl;
 	}
 
-	fout.close();
 }

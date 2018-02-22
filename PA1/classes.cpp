@@ -9,9 +9,10 @@
  * Class Implementation
  *       TABLE
  */
-Table::Table( string givenName )
+Table::Table( string givenName , string givenDatabaseName )
 {
 	name = givenName;
+	databaseName = givenDatabaseName;
 }
 Table::Table( const Table& givenTable )
 {
@@ -24,9 +25,17 @@ Table::~Table()
 {
 	metaData.clear();	
 }
+bool Table::setMeta( string givenMeta )
+{
+
+}
 string Table::getName()
 {
 	return name;
+}
+string Table::getDatabaseName()
+{
+	return databaseName;
 }
 
 
