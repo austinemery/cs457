@@ -97,7 +97,16 @@ void createTable(vector<Database>& databaseVec, string tableName, vector<string>
 *	@return void
 */
 void deleteTable( vector<Database>& databaseVec , string tableName );
+
+/**	@fn void alterTable
+*	@brief edits table based on command
+*	@pre requires existing table(s)
+*	@post edits table metadata in vector
+*	@return void
+*/
 void alterTable( vector<Database>& databaseVec , string nameOfTable , string command , string metaDataInQuestion );
+
+
 int main()
 {
 	//general variables
