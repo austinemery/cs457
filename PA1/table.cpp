@@ -5,18 +5,4 @@
 
 #include "table.h"
 
-Table::Table( string givenName )
-{
-	name = givenName;
-}
-Table::Table( const Table& givenTable )
-{
-	if( &givenTable != this )
-	{
-		name = givenTable.name;
-	}
-}
-Table::~Table()
-{
-	metaData.clear();	
-}
+

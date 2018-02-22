@@ -1,13 +1,10 @@
 all:	PA1
 
-PA1:	PA1.cpp	table.o	table.h	database.o	database.h
-		g++	PA1.cpp	table.o	database.o	-g	-o	PA1
+PA1:	PA1.cpp	classes.o	classes.h
+		g++	PA1.cpp	classes.o	-g	-o	PA1
 
-table.o:	table.cpp
-		g++	-c	table.cpp	-g
-
-database.o:	database.cpp
-		g++	-c	database.cpp	-g
+classes.o:	classes.cpp
+		g++	-c	classes.cpp	-g
 
 clean:
 		rm	-rf	*.o	PA1

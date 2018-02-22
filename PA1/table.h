@@ -9,17 +9,3 @@
 
 using namespace std;
 
-class Table{
-
-	public:
-		Table(string);
-		Table(const Table&);
-		~Table();
-
-		//Data related
-
-
-	private:
-		string name;
-		vector<string> metaData;
-};
