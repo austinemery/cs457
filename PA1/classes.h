@@ -13,15 +13,15 @@ class Table{
 
 	public:
 
-		Table( string , string , vector<string> );
-		Table( const Table& );
-		~Table();
+		Table( string , string , vector<string> );//constructor
+		Table( const Table& );		//copy constructor
+		~Table();					//destructor
 
 		//Data related
-		string getName();
-		string getDatabaseName();
-		void printData();
-		void addMetaCol( string );
+		string getName();			//returns table name
+		string getDatabaseName();	//returns database name
+		void printData();			//prints our table data
+		void addMetaCol( string );	//edits metadata on command
 
 		bool setMeta( string );		//sets meta data and returns status
 
@@ -40,10 +40,10 @@ class Database{
 
 		//Data related
 		string getName();
-		bool hasTable( string );
-		void addTable( Table& );
-		void deleteTable( string );
-		void alterTable( string , string , string );
+		bool hasTable( string );	//returns 1 if database contains a table
+		void addTable( Table& );	//pushes table to tableData vector
+		void deleteTable( string );	//removes table from tableData
+		void alterTable( string , string , string );	//edits table based on command
 
 	private:
 		string name;				//name of table
