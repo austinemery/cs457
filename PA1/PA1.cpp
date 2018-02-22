@@ -182,7 +182,6 @@ int main()
 
 				if (inputFromUser.find_first_of(")") != inputFromUser.find_last_of(")")) //if there are 2 ')'
 				{
-					cout << "TEHRE ARE 2 DUDE" << endl;
 					userGivenMetaData.push_back(inputFromUser.substr(1, inputFromUser.find(")")));
 				}
 				else
@@ -343,7 +342,6 @@ void createDatabase(vector<Database>& databaseVec, string databaseName)
 		globalWorkingDatabase = databaseVec.size()-1;
 
 		updateDatabaseList(databaseVec);
-
 		cout << "--Database " << databaseVec[databaseVec.size()-1].getName() << " created." << endl;
 	} 
 	else
@@ -452,6 +450,7 @@ void deleteTable( vector<Database>& databaseVec , string tableName )
 	{
 		cout << "--!Failed to delete " << tableName << " because it does not exist." << endl;
 	}
+	databaseVec[globalWorkingDatabase].updateTableList();
 }
 void createTable(vector<Database>& databaseVec, string tableName, vector<string> givenMetaData)
 {
@@ -492,6 +491,7 @@ void createTable(vector<Database>& databaseVec, string tableName, vector<string>
 	{
 		cout << "--!Failed, there is no working database." << endl;
 	}
+	databaseVec[globalWorkingDatabase].updateTableList();
 
 }
 void alterTable( vector<Database>& databaseVec , string nameOfTable , string command , string metaDataInQuestion )

@@ -151,3 +151,22 @@ void Database::printTable( string tableToPrint )
 
 	tableData[tableIndex].printData();
 }
+void Database::updateTableList()
+{
+	string filePath = "./data/" + name + "/" + "Info";
+	ofstream fout;
+	fout.open(filePath.c_str(), ios::app);
+
+	if(!fout.is_open())
+	{
+		cout << "--ERROR: Could not open ./data" << name << "/tableList.txt to write--" << endl;
+		exit(1);
+	}
+
+	for(int i = 0 ; i < tableData.size() ; i++ )
+	{
+		fout << tableData[i].getName() << endl;
+	}
+
+	fout.close();
+}
