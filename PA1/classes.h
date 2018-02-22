@@ -12,6 +12,7 @@ using namespace std;
 class Table{
 
 	public:
+
 		Table( string , string , vector<string> );
 		Table( const Table& );
 		~Table();
@@ -21,18 +22,21 @@ class Table{
 		string getDatabaseName();
 		void printData();
 		void addCol( string );
+
+		bool setMeta( string );		//
+
 	private:
-		string name;
-		string databaseName;
-		vector<string> metaData;
+		string name;				//Name of table
+		string databaseName;		//Name of associated database
+		vector<string> metaData;	//
 };
 
 class Database{
 
 	public:
-		Database( string );
-		Database( const Database& );
-		~Database();
+		Database( string );			//constructor
+		Database( const Database& );//copy constructor
+		~Database();				//desctructor
 
 		//Data related
 		string getName();
@@ -40,7 +44,7 @@ class Database{
 		void addTable( Table& );
 
 	private:
-		string name;
-		vector<string> metaData;
-		vector<Table> tableData;
+		string name;				//name of table
+		vector<string> metaData;	//
+		vector<Table> tableData;	//vector containing tables
 };
