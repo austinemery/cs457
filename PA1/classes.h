@@ -12,35 +12,35 @@ using namespace std;
 class Table{
 
 	public:
-		Table( string , string );
-		Table( const Table& );
-		~Table();
+		Table( string , string );	//constructor
+		Table( const Table& );		//copy constructor
+		~Table();					//desctructor
 
 		//Data related
-		string getName();
-		string getDatabaseName();
+		string getName();			//returns name of table
+		string getDatabaseName();	//returns name of database
 
-		bool setMeta( string );
+		bool setMeta( string );		//
 
 	private:
-		string name;
-		string databaseName;
-		vector<string> metaData;
+		string name;				//Name of table
+		string databaseName;		//Name of associated database
+		vector<string> metaData;	//
 };
 
 class Database{
 
 	public:
-		Database( string );
-		Database( const Database& );
-		~Database();
+		Database( string );			//constructor
+		Database( const Database& );//copy constructor
+		~Database();				//desctructor
 
 		//Data related
-		string getName();
-		bool hasTable();
+		string getName();			//Returns name of database
+		bool hasTable();			//If the database holds any table(s) return 1
 
 	private:
-		string name;
-		vector<string> metaData;
-		vector<Table> tableData;
+		string name;				//name of table
+		vector<string> metaData;	//
+		vector<Table> tableData;	//vector containing tables
 };
