@@ -94,13 +94,13 @@ void Database::deleteTable( string tableToDelete )
 
 	for( tableIndex = 0 ; tableIndex < tableData.size() ; tableIndex++ )
 	{
-		if( whichTable == tableData[tableIndex].getName() )
+		if( tableToDelete == tableData[tableIndex].getName() )
 		{
 			break;
 		}
 	}
 
-	tableData.erase(tableIndex);
+	tableData.erase(tableData.begin() + tableIndex);
 }
 bool Database::hasTable( string requestedTable )
 {
