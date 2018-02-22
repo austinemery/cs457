@@ -97,7 +97,15 @@ void createTable(vector<Database>& databaseVec, string tableName, vector<string>
 *	@return void
 */
 void deleteTable( vector<Database>& databaseVec , string tableName );
+
+/**	@fn void alterTable
+*	@brief edits table based on command
+*	@pre requires existing table(s)
+*	@post edits table metadata in vector
+*	@return void
+*/
 void alterTable( vector<Database>& databaseVec , string nameOfTable , string command , string metaDataInQuestion );
+
 int main()
 {
 	//general variables
@@ -192,6 +200,21 @@ int main()
 				cin >> inputFromUser;
 				deleteTable(databaseList, inputFromUser.substr(0,inputFromUser.length()-1));
 			}	
+		}
+		else if (inputFromUser.find("SELECT") != string::npos)
+		{
+			cin >> inputFromUser; // toss * we'll use this later
+			cin >> inputFromUser; // toss FROM we'll use this later
+			cin >> inputFromUser; // Name of table
+
+			if( databaseList[globalWorkingDatabase].hasTable(inputFromUser))
+			{
+				databaseList[globalWorkingDatabase].printTable(inputFromUser);
+			}
+			else
+			{
+				cout << "--!Failed table " << inputFromUser << " does not exist." << endl;
+			}
 		}
 		else if (inputFromUser.find("USE") != string::npos)
 		{
@@ -427,6 +450,9 @@ void createTable(vector<Database>& databaseVec, string tableName, vector<string>
 		
 			Table holdTable( tableName , databaseVec[globalWorkingDatabase].getName() , givenMetaData );
 			databaseVec[globalWorkingDatabase].addTable( holdTable );
+
+			databaseVec[globalWorkingDatabase].printTable(tableName);
+			cout << "Table " << tableName << " created." << endl;
 		}
 		else
 		{

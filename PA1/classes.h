@@ -39,11 +39,13 @@ class Database{
 		~Database();				//desctructor
 
 		//Data related
-		string getName();
+		string getName();	
+
 		bool hasTable( string );	//returns 1 if database contains a table
 		void addTable( Table& );	//pushes table to tableData vector
 		void deleteTable( string );	//removes table from tableData
 		void alterTable( string , string , string );	//edits table based on command
+		void printTable( string );
 
 	private:
 		string name;				//name of table

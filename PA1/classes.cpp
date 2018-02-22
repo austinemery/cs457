@@ -11,12 +11,15 @@
  */
 Table::Table( string givenName , string givenDatabaseName , vector<string> givenMeta )
 {
+	cout << "Hallo fren. I am initializing." << endl;
 	name = givenName;
+	cout << "Name: " << name << endl;
 	databaseName = givenDatabaseName;
-
+	cout << "DatabaseName: " << databaseName << endl;
 	for( int index = 0 ; index < givenMeta.size() ; index++ )
 	{
 		metaData.push_back(givenMeta[index]);
+		cout << metaData[index] << endl;
 	}
 }
 Table::Table( const Table& givenTable )
@@ -34,6 +37,8 @@ Table::~Table()
 }
 void Table::printData()
 {
+	cout << "dick butt" << endl;
+	cout << "Size of metaData: " << metaData.size() << endl;
 	for( int index = 0 ; index < metaData.size() ; index++ )
 	{
 		if( index == ( metaData.size() - 1 ) )
@@ -86,7 +91,10 @@ string Database::getName()
 }
 void Database::addTable( Table& givenTable )
 {
+	cout << "FROM DATABASE:" << endl << endl;
+	givenTable.printData();
 	tableData.push_back( givenTable );
+	tableData.back().printData();
 }
 void Database::deleteTable( string tableToDelete )
 {
@@ -132,4 +140,19 @@ void Database::alterTable( string command, string whichTable , string givenMeta 
 	{
 		tableData[tableIndex].addMetaCol( givenMeta );
 	}
+}
+void Database::printTable( string tableToPrint )
+{
+	cout << "ass fuck" << endl;
+	int tableIndex = 0;
+
+	for( int index = 0 ; index < tableData.size() ; index++ )
+	{
+		if( tableToPrint == tableData[index].getName() )
+		{
+			tableIndex = index;
+		}
+	}
+
+	tableData[tableIndex].printData();
 }
