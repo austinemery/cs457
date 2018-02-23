@@ -130,12 +130,14 @@ int main()
 			cout << endl << "--Command List--" << endl;
 			cout << "listDatabases - Prints all directories" << endl;
 			cout << "printWorkingDatabase - Prints working database" << endl;
-			cout << "CREATE DATABASE <name> - Creates a new database" << endl;
-			cout << "DROP DATABASE <name> - Deletes an existing database" << endl;
-			cout << "CREATE TABLE <name> - Creates a new table in the working database" << endl;
-			cout << "DROP TABLE <name> - Deletes an existing table in the working database" << endl;
-			cout << "USE <name> - Changes the working database" << endl;
-			cout << "quit - ends the program" << endl;
+			cout << "CREATE DATABASE <name>; - Creates a new database" << endl;
+			cout << "DROP DATABASE <name>; - Deletes an existing database" << endl;
+			cout << "CREATE TABLE <name>; - Creates a new table in the working database" << endl;
+			cout << "DROP TABLE <name>; - Deletes an existing table in the working database" << endl;
+			cout << "USE <name>; - Changes the working database" << endl;
+			cout << "ALTER TABLE <name> <command> <alteration>; - Alter metadata of table" << endl;
+			cout << "SELECT * FROM <name>; - Prints data of table" << endl;
+			cout << ".EXIT - ends the program" << endl;
 		}
 		else if (inputFromUser.find("listD") != string::npos)
 		{
