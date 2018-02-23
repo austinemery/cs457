@@ -71,6 +71,11 @@ string Table::getDatabaseName()
 Database::Database( string givenName )
 {
 	name = givenName;
+
+	for( int index = 0 ; index < givenMeta.size() ; index++ )
+	{
+		metaData.push_back( givenMeta[index] );
+	}
 }
 Database::Database( const Database& givenDatabase )
 {
@@ -153,6 +158,7 @@ void Database::printTable( string tableToPrint )
 }
 void Database::updateTableList()
 {
+	string toss;
 	string filePath = "./data/" + name + "/" + "Info";
 	ofstream fout;
 	fout.open(filePath.c_str(), ios::app);
@@ -162,6 +168,12 @@ void Database::updateTableList()
 		cout << "--ERROR: Could not open ./data" << name << "/tableList.txt to write--" << endl;
 		exit(1);
 	}
+
+	for( int i = 0 ; i < 6 ; i++ )
+	{
+			getline(fout, toss);		
+	}
+
 
 	for(int i = 0 ; i < tableData.size() ; i++ )
 	{
