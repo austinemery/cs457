@@ -266,20 +266,73 @@ int main()
 void readDatabaseList(vector<Database>& databaseVec)
 {
 	string tempString;
+	string tempDataBaseName;
+	string tempTableName;
 
 	ifstream fin;
+	ifstream tableIn;
+	ifstream tableMetaIn;
+
 	fin.open("./data/databaseList.txt");
 	
 	if (!fin.is_open())
 	{
-		cout << "--ERROR: Could not open data/databaseList.txt to read--" << endl;
+		cout << "--ERROR: Could not open ./data/databaseList.txt to read--" << endl;
 		exit(1);
 	}
-	
-	while (fin >> tempString)
+
+	//while there are databases to read	
+	while (fin >> tempDataBaseName)
 	{
-		Database holdDatabase(tempString);
-		databaseVec.push_back( holdDatabase );
+		cout << "DB NAMES: " << tempDataBaseName << endl;
+		
+		vector<string> tempMetaData;
+		vector<string> tempTableNames;
+
+		Database holdDatabase(tempDataBaseName);
+		databaseVec.push_back(holdDatabase);
+		
+		//read the tables as well
+		tableIn.open(("./data/" + tempDataBaseName + "/Info").c_str());		
+		
+		if (!tableIn.is_open())
+		{
+			cout << "--ERROR: Could not open ./data/" << tempDataBaseName << "/Info to read--" << endl;
+			exit(1);
+		}
+
+		while (tableIn >> tempTableName)
+		{
+			if (tempTableName.find("Tables-") != string::npos)
+			{
+				break;
+			}
+		}
+		while (tableIn >> tempTableName)
+		{
+			cout << "TABLE NAMES: " << tempTableName << endl;
+
+			tableMetaIn.open(("./data/" + tempDataBaseName + "/" + tempTableName).c_str());
+
+			if (!tableMetaIn.is_open())
+			{
+				cout << "--ERROR: Could not open ./data/" << tempDataBaseName << "/Info to read--" << endl;
+				exit(1);
+			}
+
+			while (getline(tableMetaIn, tempString))
+			{
+				cout << "META: " << tempString << endl;
+				tempMetaData.push_back(tempString);
+			}
+
+			Table tempTable(tempTableName, tempDataBaseName, tempMetaData);
+			databaseVec.back().addTable(tempTable);
+
+			tableMetaIn.close();
+		}
+		
+		tableIn.close();
 	}
 	
 	fin.close();
