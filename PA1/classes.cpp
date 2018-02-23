@@ -13,6 +13,7 @@ Table::Table( string givenName , string givenDatabaseName , vector<string> given
 {
 	name = givenName;
 	databaseName = givenDatabaseName;
+
 	for( int index = 0 ; index < givenMeta.size() ; index++ )
 	{
 		metaData.push_back(givenMeta[index]);
@@ -30,6 +31,7 @@ Table::Table( const Table& givenTable )
 		}
 	}
 }
+
 Table::~Table()
 {
 	name = '\0';
@@ -71,17 +73,19 @@ string Table::getDatabaseName()
 Database::Database( string givenName )
 {
 	name = givenName;
-
-	for( int index = 0 ; index < givenMeta.size() ; index++ )
-	{
-		metaData.push_back( givenMeta[index] );
-	}
+	tableData.clear();
 }
 Database::Database( const Database& givenDatabase )
 {
 	if( &givenDatabase != this )
 	{
+		tableData.clear();
 		name = givenDatabase.name;
+		
+		for( int i = 0 ; i < givenDatabase.tableData.size() ; i++ )
+		{
+			tableData.push_back(givenDatabase.tableData[i]);
+		}
 	}
 }
 Database::~Database()
@@ -160,20 +164,41 @@ void Database::updateTableList()
 {
 	string toss;
 	string filePath = "./data/" + name + "/" + "Info";
-	ofstream fout;
-	fout.open(filePath.c_str(), ios::app);
 
-	if(!fout.is_open())
+	vector<string> tempStringVec;
+	
+	ifstream fin;
+	fin.open(filePath.c_str());
+	
+	if(!fin.is_open())
 	{
-		cout << "--ERROR: Could not open ./data" << name << "/tableList.txt to write--" << endl;
+		cout << "--ERROR: Could not open ./data" << name << "/Info to write--" << endl;
 		exit(1);
 	}
 
-	for( int i = 0 ; i < 6 ; i++ )
+	while (getline(fin, toss))
+	{	
+		tempStringVec.push_back(toss);
+		if (toss.find("List") != string::npos)
+		{
+			break;
+		}
+	}
+	fin.close();
+
+	ofstream fout;
+	fout.open(filePath.c_str());
+
+	if(!fout.is_open())
 	{
-			getline(fout, toss);		
+		cout << "--ERROR: Could not open ./data" << name << "/Info to write--" << endl;
+		exit(1);
 	}
 
+	for(int i = 0 ; i < tempStringVec.size() ; i++ )
+	{
+		fout << tempStringVec[i] << endl;
+	}
 
 	for(int i = 0 ; i < tableData.size() ; i++ )
 	{
@@ -181,4 +206,12 @@ void Database::updateTableList()
 	}
 
 	fout.close();
+}
+
+void Database::listTables()
+{
+	for( int index = 0 ; index < tableData.size() ; index++ )
+	{
+		cout << tableData[index].getName() << endl;	
+	}
 }

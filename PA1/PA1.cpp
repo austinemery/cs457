@@ -283,13 +283,13 @@ void readDatabaseList(vector<Database>& databaseVec)
 		exit(1);
 	}
 
+	vector<string> tempMetaData;
+	string tempTableNames;
+	int databaseIndex = 0;
 	//while there are databases to read	
 	while (fin >> tempDataBaseName)
 	{
-		cout << "DB NAMES: " << tempDataBaseName << endl;
-		
-		vector<string> tempMetaData;
-		vector<string> tempTableNames;
+		tempMetaData.clear();
 
 		Database holdDatabase(tempDataBaseName);
 		databaseVec.push_back(holdDatabase);
@@ -312,8 +312,6 @@ void readDatabaseList(vector<Database>& databaseVec)
 		}
 		while (tableIn >> tempTableName)
 		{
-			cout << "TABLE NAMES: " << tempTableName << endl;
-
 			tableMetaIn.open(("./data/" + tempDataBaseName + "/" + tempTableName).c_str());
 
 			if (!tableMetaIn.is_open())
@@ -324,19 +322,18 @@ void readDatabaseList(vector<Database>& databaseVec)
 
 			while (getline(tableMetaIn, tempString))
 			{
-				cout << "META: " << tempString << endl;
 				tempMetaData.push_back(tempString);
 			}
 
 			Table tempTable(tempTableName, tempDataBaseName, tempMetaData);
-			databaseVec.back().addTable(tempTable);
+			databaseVec[databaseIndex].addTable(tempTable);
+			tempMetaData.clear();
 
 			tableMetaIn.close();
 		}
-		
 		tableIn.close();
+		databaseIndex++;
 	}
-	
 	fin.close();
 }
 
@@ -420,7 +417,7 @@ void deleteDatabase(vector<Database>& databaseVec, string databaseName)
 	}
 	else
 	{
-		filePath.append(databaseVec[checkInt].getName()); //?
+		filePath.append(databaseVec[checkInt].getName());
 		databaseVec.erase(databaseVec.begin() + checkInt);
 		const int errorInt = system(("rm -r " + filePath).c_str());
 		if (errorInt == -1)

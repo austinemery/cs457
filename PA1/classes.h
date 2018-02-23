@@ -49,6 +49,7 @@ class Database{
 		void deleteTable( string );	//removes table from tableData
 		void alterTable( string , string , string );	//edits table based on command
 		void printTable( string );
+		void listTables();
 
 	private:
 		string name;				//name of table
