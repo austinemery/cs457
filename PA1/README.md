@@ -12,3 +12,5 @@ For a list of commands do while running:
 ```
 
 # Austin is the bees knees
+## Mercedes is the coolest cat
+## Nick is a hot dog
