@@ -24,13 +24,16 @@ class Table{
 		string getDatabaseName();	//returns database name
 		void printData();			//prints our table data
 		void addMetaCol( string );	//edits metadata on command
-
+		void addTuple( string );
 		bool setMeta( string );		//sets meta data and returns status
 
 	private:
+		int numbTuples;
+		int numbAtt;
 		string name;				//Name of table
 		string databaseName;		//Name of associated database
 		vector<string> metaData;	//vector of the column types
+		string data[100][100];
 };
 
 class Database{

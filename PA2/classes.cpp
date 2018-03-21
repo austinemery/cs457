@@ -11,6 +11,7 @@
  */
 Table::Table( string givenName , string givenDatabaseName , vector<string> givenMeta )
 {
+	numbTuples = 0;
 	name = givenName;
 	databaseName = givenDatabaseName;
 
@@ -18,16 +19,36 @@ Table::Table( string givenName , string givenDatabaseName , vector<string> given
 	{
 		metaData.push_back(givenMeta[index]);
 	}
+
+	numbAtt = metaData.size();
 }
 Table::Table( const Table& givenTable )
 {
+	for( int i = 0 ; i < givenTable.numbTuples ; i++ )
+	{
+		for( int j = 0 ; j < givenTable.numbAtt ; j++ )
+		{
+			data[i][j] = "\0";
+		}
+	}
+	numbTuples = givenTable.numbTuples;
+	numbAtt = givenTable.numbAtt;
+	metaData.clear();
 	if( &givenTable != this )
 	{
 		name = givenTable.name;
 		databaseName = givenTable.databaseName;
-		for (int i = 0; i < givenTable.metaData.size(); i++)
+		for ( int i = 0; i < givenTable.metaData.size(); i++)
 		{
 			metaData.push_back(givenTable.metaData[i]);
+		}
+
+		for( int i = 0 ; i < givenTable.numbTuples ; i++ )
+		{
+			for( int j = 0 ; j < givenTable.numbAtt ; j++ )
+			{
+				data[i][j] = givenTable.data[i][j];
+			}
 		}
 	}
 }
@@ -36,10 +57,13 @@ Table::~Table()
 {
 	name = '\0';
 	databaseName = '\0';
-	metaData.clear();	
+	numbTuples = 0;
+	numbAtt = 0;
+	metaData.clear();
 }
 void Table::printData()
 {
+	cout << "META DATA" << endl;
 	for( int index = 0 ; index < metaData.size() ; index++ )
 	{
 		if( index == ( metaData.size() - 1 ) )
@@ -51,10 +75,60 @@ void Table::printData()
 			cout << metaData[index] << " | ";			
 		}
 	}
+
+	cout << "DATA" << endl;
+	for( int index = 0 ; index < numbTuples ; index++ )
+	{
+		for( int jndex = 0 ; jndex < numbAtt ; jndex++ )
+		{
+			if( jndex == (numbAtt-1) )
+			{
+				cout << data[index][jndex] << endl;
+			}
+			else
+			{
+				cout << data[index][jndex] << " | ";				
+			}
+
+		}
+	}
 }
 void Table::addMetaCol( string givenCol )
 {
 	metaData.push_back(givenCol);
+}
+
+void Table::addTuple( string givenData )
+{
+	vector<string> parsedTuple;
+	string holdData;
+	string assemblingData;
+	int index = 0;
+
+	while( givenData[0] != '\0' )
+	{
+		while( givenData[0] != ' ' )
+		{
+
+			holdData = givenData[0];
+			assemblingData += holdData;
+		
+			givenData.erase(0,1);
+		}
+		givenData.erase(0,1);
+		parsedTuple.push_back(assemblingData);
+
+		assemblingData = "\0";
+	}
+
+	for( int index = 0 ; index < numbAtt ; index++ )
+	{
+		data[numbTuples][index] = parsedTuple[index];
+	}
+
+	printData();
+	numbTuples++;
+
 }
 string Table::getName()
 {
@@ -141,9 +215,13 @@ void Database::alterTable( string command, string whichTable , string givenMeta 
 		}
 	}
 
-	if( command == "ADD" )
+	if( command == "ADD" || command == "add" )
 	{
 		tableData[tableIndex].addMetaCol( givenMeta );
+	}
+	else if( command == "INSERT" || command == "insert" )
+	{
+		tableData[tableIndex].addTuple( givenMeta );
 	}
 }
 void Database::printTable( string tableToPrint )

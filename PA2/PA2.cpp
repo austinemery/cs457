@@ -11,6 +11,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <time.h>
+#include <stdlib.h>
 #include "classes.h"
 
 using namespace std;
@@ -114,6 +115,10 @@ int main()
 
 	string tempTableName;
 
+	string nameOfTable;
+	string command;
+	string metaDataInQuestion;
+
 	//used to hold database list info for running the program
 	vector<Database> databaseList;
 	readDatabaseList(databaseList);
@@ -147,16 +152,16 @@ int main()
 		{
 			printWorkingDatabase(databaseList);
 		}
-		else if (inputFromUser.find("CREATE") != string::npos)
+		else if ( (inputFromUser.find("CREATE") != string::npos) || (inputFromUser.find("create") != string::npos))
 		{
 			cin >> inputFromUser;
 			
-			if (inputFromUser.find("DATABASE") != string::npos)
+			if ( (inputFromUser.find("DATABASE") != string::npos) || (inputFromUser.find("database") != string::npos))
 			{	
 				cin >> inputFromUser;
 				createDatabase(databaseList, inputFromUser.substr(0, inputFromUser.length() - 1));
 			}
-			else if (inputFromUser.find("TABLE") != string::npos) //CREATE TABLE tbl_1 (a1 int, a2 varchar(20)); 
+			else if ( (inputFromUser.find("TABLE") != string::npos) || (inputFromUser.find("table") != string::npos))//CREATE TABLE tbl_1 (a1 int, a2 varchar(20)); 
 			{
 				cin >> tempTableName;
 				
@@ -193,22 +198,22 @@ int main()
 				createTable(databaseList, tempTableName , userGivenMetaData);
 			}		
 		}
-		else if (inputFromUser.find("DROP") != string::npos)
+		else if ( (inputFromUser.find("DROP") != string::npos) || (inputFromUser.find("drop") != string::npos))
 		{
 			cin >> inputFromUser;
-			if (inputFromUser.find("DATABASE") != string::npos)
+			if ( (inputFromUser.find("DATABASE") != string::npos) || (inputFromUser.find("database") != string::npos))
 			{	
 				cin >> inputFromUser;
 				deleteDatabase(databaseList, inputFromUser.substr(0, inputFromUser.length() - 1));
 			}
-			else if (inputFromUser.find("TABLE") != string::npos)
+			else if ( (inputFromUser.find("TABLE") != string::npos) || (inputFromUser.find("table") != string::npos))
 			{
 				//do something
 				cin >> inputFromUser;
 				deleteTable(databaseList, inputFromUser.substr(0,inputFromUser.length()-1));
 			}	
 		}
-		else if (inputFromUser.find("SELECT") != string::npos)
+		else if ( (inputFromUser.find("SELECT") != string::npos) || (inputFromUser.find("select") != string::npos))
 		{
 			cin >> inputFromUser; // toss * we'll use this later
 			cin >> inputFromUser; // toss FROM we'll use this later
@@ -225,19 +230,16 @@ int main()
 				cout << "--!Failed to query table " << inputFromUser << " because it does not exist." << endl;
 			}
 		}
-		else if (inputFromUser.find("USE") != string::npos)
+		else if ( (inputFromUser.find("USE") != string::npos) || (inputFromUser.find("use") != string::npos))
 		{
 			cin >> inputFromUser;
 			changeWorkingDatabase(databaseList, inputFromUser.substr(0, inputFromUser.length() - 1));
 		}
-		else if (inputFromUser.find("ALTER") != string::npos)
+		else if ( (inputFromUser.find("ALTER") != string::npos) || (inputFromUser.find("alter") != string::npos))
 		{
 			cin >> inputFromUser;
-			if( inputFromUser.find("TABLE") != string::npos)
+			if( (inputFromUser.find("TABLE") != string::npos) || (inputFromUser.find("table") != string::npos))
 			{
-				string nameOfTable;
-				string command;
-				string metaDataInQuestion;
 				//ALTER TABLE tbl_1 ADD a3 float;
 				cin >> nameOfTable;
 				cin >> command;
@@ -245,9 +247,60 @@ int main()
 				cin >> inputFromUser;
 
 				metaDataInQuestion = metaDataInQuestion + " " + inputFromUser.substr(0, inputFromUser.length()-1); 
-
+				databaseList[globalWorkingDatabase].alterTable( command , nameOfTable , metaDataInQuestion );
 				alterTable( databaseList , nameOfTable , command , metaDataInQuestion );
 			}
+		}
+		else if ( (inputFromUser.find("INSERT") != string::npos) || (inputFromUser.find("insert") != string::npos) )
+		{
+			string grab;
+			string holdData = "\0";
+			string assemblingData;
+			metaDataInQuestion.clear();
+			// insert into Product values(1, 'Gizmo', 19.99);
+			command = inputFromUser;
+			cin >> inputFromUser; //toss 'into'
+			cin >> nameOfTable;
+
+			do
+			{
+				cin >> grab;
+				metaDataInQuestion += grab;
+			}while( !(grab.find(";") != string::npos) );
+
+			grab = "\0";
+			//Parse this
+
+
+			metaDataInQuestion.erase( 0 , 7 );
+
+			while( metaDataInQuestion[0] != ';' )
+			{
+				while( metaDataInQuestion[0] != ',' )
+				{
+					if( metaDataInQuestion[0] == '\'' || metaDataInQuestion[0] == '\"' )
+					{
+						metaDataInQuestion.erase(0,1);
+						continue;
+					} else if( metaDataInQuestion[0] == ')' )
+					{
+						break;
+					}
+					holdData = metaDataInQuestion[0];
+					assemblingData += holdData;
+
+					metaDataInQuestion.erase(0,1);
+				}
+
+				metaDataInQuestion.erase(0,1);
+
+				grab += assemblingData + " ";
+				assemblingData = "\0";		
+			}
+
+			databaseList[globalWorkingDatabase].alterTable( command , nameOfTable , grab );
+			alterTable( databaseList , nameOfTable , command , grab );
+			
 		}
 		else if ( inputFromUser == ".EXIT" )
 		{
