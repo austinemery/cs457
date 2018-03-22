@@ -603,12 +603,14 @@ void alterTable( vector<Database>& databaseVec , string nameOfTable , string com
 {
 	if( databaseVec[globalWorkingDatabase].hasTable(nameOfTable) )
 	{
-		databaseVec[globalWorkingDatabase].alterTable( command , nameOfTable , metaDataInQuestion );
+		//databaseVec[globalWorkingDatabase].alterTable( command , nameOfTable , metaDataInQuestion );
 
 		//to file
 		ofstream fout;
-		fout.open(("./data/" + databaseVec[globalWorkingDatabase].getName() + "/" + nameOfTable).c_str(), ios::app);
-		fout << metaDataInQuestion << endl;
+		fout.open(("./data/" + databaseVec[globalWorkingDatabase].getName() + "/" + nameOfTable).c_str());
+		databaseVec[globalWorkingDatabase].printTableFile(nameOfTable, fout);
+
+		//fout << metaDataInQuestion << endl;
 		fout.close();
 
 		cout << "Table " << nameOfTable << " has been altered." << endl;

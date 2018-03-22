@@ -63,7 +63,6 @@ Table::~Table()
 }
 void Table::printData()
 {
-	cout << "META DATA" << endl;
 	for( int index = 0 ; index < metaData.size() ; index++ )
 	{
 		if( index == ( metaData.size() - 1 ) )
@@ -76,7 +75,6 @@ void Table::printData()
 		}
 	}
 
-	cout << "DATA" << endl;
 	for( int index = 0 ; index < numbTuples ; index++ )
 	{
 		for( int jndex = 0 ; jndex < numbAtt ; jndex++ )
@@ -92,6 +90,38 @@ void Table::printData()
 
 		}
 	}
+}
+ofstream& Table::printDataFile( ofstream& fout )
+{
+	for( int index = 0 ; index < metaData.size() ; index++ )
+	{
+		if( index == ( metaData.size() - 1 ) )
+		{
+			fout << metaData[index] << endl;
+		}
+		else
+		{
+			fout << metaData[index] << " | ";			
+		}
+	}
+
+	for( int index = 0 ; index < numbTuples ; index++ )
+	{
+		for( int jndex = 0 ; jndex < numbAtt ; jndex++ )
+		{
+			if( jndex == (numbAtt-1) )
+			{
+				fout << data[index][jndex] << endl;
+			}
+			else
+			{
+				fout << data[index][jndex] << " | ";				
+			}
+
+		}
+	}
+
+	return fout;
 }
 void Table::addMetaCol( string givenCol )
 {
@@ -121,14 +151,11 @@ void Table::addTuple( string givenData )
 		assemblingData = "\0";
 	}
 
-	for( int index = 0 ; index < numbAtt ; index++ )
-	{
-		data[numbTuples][index] = parsedTuple[index];
-	}
 
-	printData();
+	data.push_back(parsedTuple);
+
+
 	numbTuples++;
-
 }
 string Table::getName()
 {
@@ -223,6 +250,22 @@ void Database::alterTable( string command, string whichTable , string givenMeta 
 	{
 		tableData[tableIndex].addTuple( givenMeta );
 	}
+}
+ofstream& Database::printTableFile( string tableToPrint, ofstream& fout )
+{
+	int tableIndex = 0;
+
+	for( int index = 0 ; index < tableData.size() ; index++ )
+	{
+		if( tableToPrint == tableData[index].getName() )
+		{
+			tableIndex = index;
+		}
+	}
+
+	tableData[tableIndex].printDataFile(fout);
+
+	return fout;
 }
 void Database::printTable( string tableToPrint )
 {

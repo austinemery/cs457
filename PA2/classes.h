@@ -23,6 +23,7 @@ class Table{
 		string getName();			//returns table name
 		string getDatabaseName();	//returns database name
 		void printData();			//prints our table data
+		ofstream& printDataFile( ofstream& );
 		void addMetaCol( string );	//edits metadata on command
 		void addTuple( string );
 		bool setMeta( string );		//sets meta data and returns status
@@ -33,7 +34,7 @@ class Table{
 		string name;				//Name of table
 		string databaseName;		//Name of associated database
 		vector<string> metaData;	//vector of the column types
-		string data[100][100];
+		vector < vector <string> > data;
 };
 
 class Database{
@@ -52,6 +53,7 @@ class Database{
 		void deleteTable( string );	//removes table from tableData
 		void alterTable( string , string , string );	//edits table based on command
 		void printTable( string );
+		ofstream& printTableFile( string , ofstream& );
 		void listTables();
 
 	private:
