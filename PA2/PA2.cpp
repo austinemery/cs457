@@ -1,9 +1,7 @@
 //cs457
-//PA1.cpp
+//PA2.cpp
 //Austin Emery, Mercedes Anderson, Nickolas Johnson
-//Project 1
-
-//hoopla test boi
+//Project 2
 
 #include <iostream>
 #include <string>
@@ -571,13 +569,15 @@ void createTable(vector<Database>& databaseVec, string tableName, vector<string>
 			{
 				cout << "--ERROR: Could not create table--" << endl;
 			}
+			
+			int i;
 
 			//output data to table	
-			for (int i = 0; i < givenMetaData.size(); ++i)
+			for (i = 0; i < givenMetaData.size() - 1; ++i)
 			{
-				fout << givenMetaData[i] << endl;
+				fout << givenMetaData[i] << " | ";
 			}
-
+			fout << givenMetaData[i] << endl;
 			fout.close();
 		
 			Table holdTable( tableName , databaseVec[globalWorkingDatabase].getName() , givenMetaData );
