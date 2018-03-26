@@ -26,6 +26,7 @@ class Table{
 		ofstream& printDataFile( ofstream& );
 		void addMetaCol( string );	//edits metadata on command
 		void addTuple( string );
+		void updateTuple( string );
 		bool setMeta( string );		//sets meta data and returns status
 
 	private:
@@ -57,7 +58,7 @@ class Database{
 		void listTables();
 
 	private:
-		string name;				//name of table
+		string name;				//name of database
 		vector<string> metaData;	//Name, creation time, owner, etc (info given by user)
 		vector<Table> tableData;	//vector containing tables
 };

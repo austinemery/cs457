@@ -146,6 +146,10 @@ int main()
 		{
 			listDatabases(databaseList);
 		}
+		else if (inputFromUser.find("--") != string::npos)
+		{
+			
+		}
 		else if (inputFromUser.find("printW") != string::npos)
 		{
 			printWorkingDatabase(databaseList);
@@ -217,7 +221,10 @@ int main()
 			cin >> inputFromUser; // toss FROM we'll use this later
 			cin >> inputFromUser; // Name of table
 
-			inputFromUser = inputFromUser.substr(0, inputFromUser.length() - 1);
+			if (inputFromUser.find(";") != string::npos)
+			{
+				inputFromUser = inputFromUser.substr(0, inputFromUser.length() - 1);
+			}
 
 			if( databaseList[globalWorkingDatabase].hasTable(inputFromUser))
 			{
@@ -300,7 +307,55 @@ int main()
 			alterTable( databaseList , nameOfTable , command , grab );
 			
 		}
-		else if ( inputFromUser == ".EXIT" )
+		else if ( (inputFromUser.find("UPDATE") != string::npos) || (inputFromUser.find("update") != string::npos) )
+		{
+			string moreInput, tableName, toFind, toSet, varToFind, varToSet;
+			cin >> tableName;
+			cin >> moreInput;
+
+			//parse the command
+			if (moreInput == "set")
+			{
+				cin >> varToSet;
+				//for equal sign
+				cin >> moreInput;
+				cin >> toSet;
+			
+				//get rid of quotes if needed
+				if (toSet.find("'") != string::npos)
+				{
+					toSet = toSet.substr(1, toSet.length() - 2);
+				}
+
+				cin >> moreInput;
+				if (moreInput == "where")
+				{
+					cin >> varToFind;
+					//for equal sign
+					cin >> moreInput;
+					cin >> toFind;
+	
+					//remove ';' if needed
+					if (toFind.find(";") != string::npos)
+					{
+						toFind = toFind.substr(0, toFind.length() - 1);				
+					}
+					//get rid of quotes if needed
+					if (toFind.find("'") != string::npos)
+					{
+						toFind = toFind.substr(1, toFind.length() - 2);
+					}
+				}
+			}
+
+			string metaData = varToFind + " " + toFind + " " + varToSet + " " + toSet;
+
+			//update table
+			databaseList[globalWorkingDatabase].alterTable( inputFromUser , tableName , metaData );
+			alterTable( databaseList , tableName , inputFromUser , metaData );
+
+		}
+		else if ( inputFromUser == ".EXIT" || inputFromUser == ".exit")
 		{
 			//not supposed to do anything! this way we can leave the loop without an issue.
 			cout << "All done." << endl;
@@ -620,3 +675,7 @@ void alterTable( vector<Database>& databaseVec , string nameOfTable , string com
 		cout << "--!Failed to query table " << nameOfTable << " because it does not exist." << endl;
 	}
 }
+
+
+
+

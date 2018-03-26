@@ -157,6 +157,57 @@ void Table::addTuple( string givenData )
 
 	numbTuples++;
 }
+
+void Table::updateTuple( string givenData )
+{
+	//givenData order - varToFind, toFind, varToSet, toSet
+
+	//parse givenData
+
+	string varToFind, toFind, varToSet, toSet;
+
+	varToFind = givenData.substr(0, givenData.find_first_of(" "));
+	givenData.erase(0, givenData.find_first_of(" ") + 1);
+
+	toFind = givenData.substr(0, givenData.find_first_of(" "));
+	givenData.erase(0, givenData.find_first_of(" ") + 1);
+
+	varToSet = givenData.substr(0, givenData.find_first_of(" "));
+	givenData.erase(0, givenData.find_first_of(" ") + 1);
+
+	toSet = givenData;
+
+	cout << "Floop: " << varToFind << "|" << toFind << "|" << varToSet << "|" << toSet << endl;
+	
+	//find index of varToFind and index of varToSet
+	int findIndex, setIndex;	
+
+	for (int i = 0; i < numbAtt; i++)
+	{
+		cout << "I: " << data[0][i] << endl;
+
+		if (metaData[i].find(varToFind) != string::npos)
+		{
+			findIndex = i;
+		}
+		if (metaData[i].find(varToSet) != string::npos)
+		{
+			setIndex = i;
+		}
+		cout << "Indicies: " << findIndex << " " << setIndex << endl;
+	}
+	
+	//update tuple(s)
+	for (int i = 0; i < numbTuples; i++)
+	{
+		if (data[i][findIndex] == toFind)
+		{
+			data[i][setIndex] = toSet;
+			cout << "The Data: " << data[i][setIndex] << endl;
+		}
+	}
+}
+
 string Table::getName()
 {
 	return name;
@@ -249,6 +300,10 @@ void Database::alterTable( string command, string whichTable , string givenMeta 
 	else if( command == "INSERT" || command == "insert" )
 	{
 		tableData[tableIndex].addTuple( givenMeta );
+	}
+	else if( command == "UPDATE" || command == "update" )
+	{
+		tableData[tableIndex].updateTuple( givenMeta );
 	}
 }
 ofstream& Database::printTableFile( string tableToPrint, ofstream& fout )
