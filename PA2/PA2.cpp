@@ -245,7 +245,7 @@ int main()
 
 			if (tableName.find(";") != string::npos)
 			{
-				tableName = tableName.substr(0, inputFromUser.length() - 1);
+				tableName.erase(tableName.length() - 1, 1);
 			}
 			//there is more to parse
 			else
