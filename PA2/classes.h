@@ -23,6 +23,7 @@ class Table{
 		string getName();			//returns table name
 		string getDatabaseName();	//returns database name
 		void printData();			//prints our table data
+		void printQueryData( string );	//prints queried data
 		ofstream& printDataFile( ofstream& );
 		void addMetaCol( string );	//edits metadata on command
 		void addTuple( string );
@@ -53,7 +54,7 @@ class Database{
 		void updateTableList();
 		void deleteTable( string );	//removes table from tableData
 		void alterTable( string , string , string );	//edits table based on command
-		void printTable( string );
+		void printTable( string, string, string );
 		ofstream& printTableFile( string , ofstream& );
 		void listTables();
 

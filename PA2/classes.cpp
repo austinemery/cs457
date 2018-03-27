@@ -91,6 +91,87 @@ void Table::printData()
 		}
 	}
 }
+
+void Table::printQueryData( string query )
+{
+	//cout commas
+	int commaCount = 0;
+	for (int i = 0; i < query.length(); i++)
+	{
+		if (query[i] == ',')
+		{
+			commaCount++;
+		}
+	}
+
+	vector<int> indexVec;
+
+	for (int i = 0; i < commaCount; i++)
+	{
+		for (int j = 0; j < numbAtt; j++)
+		{
+			//see if string up untill comma is in metadata
+			if (metaData[j].find(query.substr(0, query.find_first_of(','))) != string::npos)
+			{
+				cout << "query before comma: " << query.substr(0, query.find_first_of(',')) << endl;
+				indexVec.push_back(j);
+			}
+		}
+		//erase part untill comma
+		query = query.substr(0, query.find_first_of(','));
+		cout << "query after erase front: " << query << endl;
+	}
+	//grab last index
+	for (int j = 0; j < numbAtt; j++)
+	{
+		if (metaData[j].find(query) != string::npos)
+		{
+			cout << "last query: " << query << endl;
+			indexVec.push_back(j);
+		}
+	}
+
+	//print query
+	for (int index = 0 ; index < metaData.size() ; index++)
+	{
+		for (int jindex = 0; jindex < indexVec.size(); jindex++)
+		{
+			if (index == indexVec[jindex])
+			{
+				if( index == ( metaData.size() - 1 ) )
+				{
+					cout << metaData[index] << endl;
+				}
+				else
+				{
+					cout << metaData[index] << " | ";			
+				}
+			}
+		}
+	}
+
+	for (int index = 0 ; index < numbTuples ; index++)
+	{
+		for (int jindex = 0 ; jindex < numbAtt ; jindex++)
+		{
+			for (int kindex = 0; kindex < indexVec.size(); kindex++)
+			{
+				if (jindex == indexVec[kindex])
+				{
+					if( jindex == (numbAtt - 1) )
+					{
+						cout << data[index][jindex] << endl;
+					}
+					else
+					{
+						cout << data[index][jindex] << " | ";				
+					}
+				}
+			}
+		}
+	}
+}
+
 ofstream& Table::printDataFile( ofstream& fout )
 {
 	for( int index = 0 ; index < metaData.size() ; index++ )
@@ -177,14 +258,14 @@ void Table::updateTuple( string givenData )
 
 	toSet = givenData;
 
-	cout << "Floop: " << varToFind << "|" << toFind << "|" << varToSet << "|" << toSet << endl;
+	//cout << "Floop: " << varToFind << "|" << toFind << "|" << varToSet << "|" << toSet << endl;
 	
 	//find index of varToFind and index of varToSet
 	int findIndex, setIndex;	
 
 	for (int i = 0; i < numbAtt; i++)
 	{
-		cout << "I: " << data[0][i] << endl;
+		//cout << "I: " << data[0][i] << endl;
 
 		if (metaData[i].find(varToFind) != string::npos)
 		{
@@ -194,7 +275,7 @@ void Table::updateTuple( string givenData )
 		{
 			setIndex = i;
 		}
-		cout << "Indicies: " << findIndex << " " << setIndex << endl;
+		//cout << "Indicies: " << findIndex << " " << setIndex << endl;
 	}
 	
 	//update tuple(s)
@@ -203,7 +284,7 @@ void Table::updateTuple( string givenData )
 		if (data[i][findIndex] == toFind)
 		{
 			data[i][setIndex] = toSet;
-			cout << "The Data: " << data[i][setIndex] << endl;
+			//cout << "The Data: " << data[i][setIndex] << endl;
 		}
 	}
 }
@@ -322,7 +403,7 @@ ofstream& Database::printTableFile( string tableToPrint, ofstream& fout )
 
 	return fout;
 }
-void Database::printTable( string tableToPrint )
+void Database::printTable( string tableToPrint , string printFlag , string queryString )
 {
 	int tableIndex = 0;
 
@@ -333,8 +414,16 @@ void Database::printTable( string tableToPrint )
 			tableIndex = index;
 		}
 	}
-
-	tableData[tableIndex].printData();
+	
+	if (printFlag == "all")
+	{
+		tableData[tableIndex].printData();
+	}
+	//query
+	else if (printFlag == "some")
+	{
+		tableData[tableIndex].printQueryData(queryString);
+	}
 }
 void Database::updateTableList()
 {
