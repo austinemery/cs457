@@ -92,7 +92,7 @@ void Table::printData()
 	}
 }
 
-void Table::printQueryData( string query )
+void Table::printQueryData( string query, string condition)
 {
 	//cout commas
 	int commaCount = 0;
@@ -113,20 +113,20 @@ void Table::printQueryData( string query )
 			//see if string up untill comma is in metadata
 			if (metaData[j].find(query.substr(0, query.find_first_of(','))) != string::npos)
 			{
-				cout << "query before comma: " << query.substr(0, query.find_first_of(',')) << endl;
+				//cout << "query before comma: " << query.substr(0, query.find_first_of(',')) << endl;
 				indexVec.push_back(j);
 			}
 		}
 		//erase part untill comma
-		query = query.substr(0, query.find_first_of(','));
-		cout << "query after erase front: " << query << endl;
+		query.erase(0, query.find_first_of(',') + 1);
+		//cout << "query after erase front: " << query << endl;
 	}
 	//grab last index
 	for (int j = 0; j < numbAtt; j++)
 	{
 		if (metaData[j].find(query) != string::npos)
 		{
-			cout << "last query: " << query << endl;
+			//cout << "last query: " << query << endl;
 			indexVec.push_back(j);
 		}
 	}
@@ -474,7 +474,7 @@ ofstream& Database::printTableFile( string tableToPrint, ofstream& fout )
 
 	return fout;
 }
-void Database::printTable( string tableToPrint , string printFlag , string queryString )
+void Database::printTable( string tableToPrint , string printFlag , string queryString , string condition)
 {
 	int tableIndex = 0;
 
@@ -493,7 +493,7 @@ void Database::printTable( string tableToPrint , string printFlag , string query
 	//query
 	else if (printFlag == "some")
 	{
-		tableData[tableIndex].printQueryData(queryString);
+		tableData[tableIndex].printQueryData(queryString, condition);
 	}
 }
 void Database::updateTableList()

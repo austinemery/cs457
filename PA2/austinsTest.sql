@@ -1,3 +1,5 @@
+DROP DATABASE test;
+
 CREATE DATABASE test;
 USE test;
 CREATE TABLE Product (pid int, name varchar(20), price float);
