@@ -295,7 +295,9 @@ void Table::deleteTuple( string givenData )
 
 	//parse givenData
 
-	string varToDelete, compSign, toDelete;
+	string varToDelete, compSign, toDelete, temp;
+
+	temp = givenData;
 
 	varToDelete = givenData.substr(0, givenData.find_first_of(" "));
 	givenData.erase(0, givenData.find_first_of(" ") + 1);
@@ -317,14 +319,17 @@ void Table::deleteTuple( string givenData )
 	}
 
 	//delete tuple(s)
+	int deleteCount = 0;
+
 	if(compSign == "=")
 	{
 		for (int i = 0; i < numbTuples; i++)
 		{
 			if (data[i][setIndex] == toDelete)
 			{
-				cout << "Erasing: " << data[i][1] << endl;
-				//data.erase(i);
+				data.erase(data.begin() + i);
+				numbTuples--;
+				deleteCount++;
 			}
 		}
 	}
@@ -335,10 +340,11 @@ void Table::deleteTuple( string givenData )
 		{
 			for (int i = 0; i < numbTuples; i++)
 			{
-				if (dataNum > stof(data[i][setIndex], NULL))
+				if (dataNum < stof(data[i][setIndex], NULL))
 				{
-					cout << "Erasing: " << data[i][1] << endl;
-					//data.erase(i);
+					data.erase(data.begin() + i);
+					numbTuples--;
+					deleteCount++;
 				}
 			}
 		}
@@ -346,13 +352,22 @@ void Table::deleteTuple( string givenData )
 		{
 			for (int i = 0; i < numbTuples; i++)
 			{
-				if (dataNum < stof(data[i][setIndex], NULL))
+				if (dataNum > stof(data[i][setIndex], NULL))
 				{
-					cout << "Erasing: " << data[i][1] << endl;
-					//data.erase(i);
+					data.erase(data.begin() + i);
+					numbTuples--;
+					deleteCount++;
 				}
 			}
 		}
+	}
+	if (deleteCount == 1)
+	{
+		cout << deleteCount << " record deleted." << endl;
+	}
+	else if (deleteCount > 1)
+	{
+		cout << deleteCount << " records deleted." << endl;
 	}
 }
 

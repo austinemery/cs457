@@ -23,6 +23,6 @@ delete from Product
 where name = 'Gizmo';
 
 delete from Product 
-where price > 10.00;
+where price > 14.98;
 
 .exit
