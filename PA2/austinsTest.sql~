@@ -1,3 +1,5 @@
+DROP DATABASE test;
+
 CREATE DATABASE test;
 USE test;
 CREATE TABLE Product (pid int, name varchar(20), price float);
@@ -17,5 +19,5 @@ select name, price
 from Product 
 where pid != 2;
 
-.EXIT
+.exit
 

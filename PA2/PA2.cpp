@@ -217,9 +217,10 @@ int main()
 		}
 		else if ( (inputFromUser.find("SELECT") != string::npos) || (inputFromUser.find("select") != string::npos))
 		{
-			string stringsToQuery;
+			string stringsToQuery, tableName;
 			string tempString;
 			string printFlag = "all";
+			string condition;
 
 			cin >> inputFromUser;
 			if (inputFromUser.find("*") == string::npos)
@@ -240,16 +241,32 @@ int main()
 				cin >> inputFromUser; // toss FROM we'll use this later
 			}
 			
-			cin >> inputFromUser; // Name of table
+			cin >> tableName; // Name of table
 
 			if (inputFromUser.find(";") != string::npos)
 			{
-				inputFromUser = inputFromUser.substr(0, inputFromUser.length() - 1);
+				tableName = tableName.substr(0, inputFromUser.length() - 1);
+			}
+			//there is more to parse
+			else
+			{
+				cin >> inputFromUser;
+				if (inputFromUser == "where")
+				{
+					//grab whole condition
+					while (condition.find(';') == string::npos)
+					{
+						cin >> inputFromUser;
+						condition += (inputFromUser + " ");
+					}
+					condition.erase(condition.find_last_of(';'));
+					cout << "condition after erase: " << condition << endl;
+				}
 			}
 
-			if( databaseList[globalWorkingDatabase].hasTable(inputFromUser))
+			if( databaseList[globalWorkingDatabase].hasTable(tableName))
 			{
-				databaseList[globalWorkingDatabase].printTable(inputFromUser, printFlag, stringsToQuery);
+				databaseList[globalWorkingDatabase].printTable(tableName, printFlag, stringsToQuery, condition);
 			}
 			else
 			{
@@ -386,7 +403,7 @@ int main()
 			cout << "--ERROR: Command not found, type commands for list--" << endl;
 		}
 
-	}while ( inputFromUser != ".EXIT" );
+	}while ( inputFromUser != ".EXIT" && inputFromUser != ".exit" );
 
 	updateDatabaseList(databaseList);
 }
