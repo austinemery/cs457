@@ -1,4 +1,3 @@
 db_1
 db_2
 CS457_PA2
-test

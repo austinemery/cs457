@@ -375,8 +375,8 @@ int main()
 		else if ( (inputFromUser.find("DELETE") != string::npos) || (inputFromUser.find("delete") != string::npos) )
 		{
 			string moreInput, tableName, toDelete, varToDelete;
-			cin >> tableName;
 			cin >> moreInput;
+			cin >> tableName;
 			cin >> moreInput;
 			//parse the command
 			if (moreInput == "where")

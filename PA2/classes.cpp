@@ -308,7 +308,6 @@ void Table::deleteTuple( string givenData )
 	
 	//find index of varToDelete and index of varToDelete
 	int setIndex = 0;
-	cout << endl << "TEST:\t" << varToDelete << endl;
 	for (int i = 0; i < numbAtt; i++)
 	{
 		if (metaData[i].find(varToDelete) != string::npos)
@@ -317,8 +316,6 @@ void Table::deleteTuple( string givenData )
 		}
 	}
 
-	cout << "SWOOP: " << varToDelete << "|" << compSign << "|" << toDelete << endl;
-
 	//delete tuple(s)
 	if(compSign == ">")
 	{
@@ -326,7 +323,7 @@ void Table::deleteTuple( string givenData )
 		{
 			if (data[i][setIndex].compare(toDelete) < 0)
 			{
-				cout << "Erasing: " << data[i][setIndex] << endl;
+				cout << "Erasing: " << data[i][1] << endl;
 				//data.erase(i);
 			}
 		}
@@ -337,7 +334,7 @@ void Table::deleteTuple( string givenData )
 		{
 			if (data[i][setIndex].compare(toDelete) > 0)
 			{
-				cout << "Erasing: " << data[i][setIndex] << endl;
+				cout << "Erasing: " << data[i][1] << endl;
 				//data.erase(i);
 			}
 		}
@@ -348,7 +345,7 @@ void Table::deleteTuple( string givenData )
 		{
 			if (data[i][setIndex] == toDelete)
 			{
-				cout << "Erasing: " << data[i][setIndex] << endl;
+				cout << "Erasing: " << data[i][1] << endl;
 				//data.erase(i);
 			}
 		}
