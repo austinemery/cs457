@@ -385,14 +385,41 @@ int main()
 					}
 				}
 			}
+		}
+//***********************//
+//BEGIN DELETE ALTERATION//
+//***********************//			
+		else if ( (inputFromUser.find("DELETE") != string::npos) || (inputFromUser.find("delete") != string::npos) )
+		{
+			string moreInput, tableName, toDelete, varToDelete;
+			cin >> moreInput;
+			cin >> tableName;
+			cin >> moreInput;
+			//parse the command
+			if (moreInput == "where")
+			{
+				cin >> varToDelete;
+				//for equal sign
+				cin >> moreInput;
+				cin >> toDelete;
+			
+				//get rid of quotes if needed
+				if (toDelete.find("'") != string::npos)
+				{
+					toDelete = toDelete.substr(1, toDelete.length() - 3);
+				}
+			}
 
-			string metaData = varToFind + " " + toFind + " " + varToSet + " " + toSet;
-
+			string metaData = varToDelete + " " + moreInput + " " + toDelete;
 			//update table
 			databaseList[globalWorkingDatabase].alterTable( inputFromUser , tableName , metaData );
 			alterTable( databaseList , tableName , inputFromUser , metaData );
 
 		}
+//***********************//
+// END DELETE ALTERATION //
+//***********************//
+
 		else if ( inputFromUser == ".EXIT" || inputFromUser == ".exit")
 		{
 			//not supposed to do anything! this way we can leave the loop without an issue.

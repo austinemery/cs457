@@ -289,6 +289,69 @@ void Table::updateTuple( string givenData )
 	}
 }
 
+void Table::deleteTuple( string givenData )
+{
+	//givenData order - varToDelete, compSign, toDelete
+
+	//parse givenData
+
+	string varToDelete, compSign, toDelete;
+
+	varToDelete = givenData.substr(0, givenData.find_first_of(" "));
+	givenData.erase(0, givenData.find_first_of(" ") + 1);
+
+	compSign = givenData.substr(0, givenData.find_first_of(" "));
+	givenData.erase(0, givenData.find_first_of(" ") + 1);
+
+	toDelete = givenData;
+
+	
+	//find index of varToDelete and index of varToDelete
+	int setIndex = 0;
+	for (int i = 0; i < numbAtt; i++)
+	{
+		if (metaData[i].find(varToDelete) != string::npos)
+		{
+			setIndex = i;
+		}
+	}
+
+	//delete tuple(s)
+	if(compSign == ">")
+	{
+		for (int i = 0; i < numbTuples; i++)
+		{
+			if (data[i][setIndex].compare(toDelete) < 0)
+			{
+				cout << "Erasing: " << data[i][1] << endl;
+				//data.erase(i);
+			}
+		}
+	}
+	else if(compSign == "<")
+	{
+		for (int i = 0; i < numbTuples; i++)
+		{
+			if (data[i][setIndex].compare(toDelete) > 0)
+			{
+				cout << "Erasing: " << data[i][1] << endl;
+				//data.erase(i);
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < numbTuples; i++)
+		{
+			if (data[i][setIndex] == toDelete)
+			{
+				cout << "Erasing: " << data[i][1] << endl;
+				//data.erase(i);
+			}
+		}
+	}
+}
+
 string Table::getName()
 {
 	return name;
@@ -385,6 +448,10 @@ void Database::alterTable( string command, string whichTable , string givenMeta 
 	else if( command == "UPDATE" || command == "update" )
 	{
 		tableData[tableIndex].updateTuple( givenMeta );
+	}
+	else if( command == "DELETE" || command == "delete" )
+	{
+		tableData[tableIndex].deleteTuple( givenMeta );
 	}
 }
 ofstream& Database::printTableFile( string tableToPrint, ofstream& fout )

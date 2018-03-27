@@ -15,5 +15,10 @@ select name, price
 from Product 
 where pid != 2;
 
-.exit
+delete from Product 
+where name = 'Gizmo';
 
+delete from Product 
+where price > 10.00;
+
+.exit
