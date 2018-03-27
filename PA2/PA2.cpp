@@ -385,6 +385,10 @@ int main()
 					}
 				}
 			}
+			string metaData = varToFind + " " + toFind + " " + varToSet + " " + toSet;
+
+			databaseList[globalWorkingDatabase].alterTable( inputFromUser , tableName , metaData );
+			alterTable( databaseList , tableName , inputFromUser , metaData );
 		}
 //***********************//
 //BEGIN DELETE ALTERATION//

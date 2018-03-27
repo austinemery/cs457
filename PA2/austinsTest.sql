@@ -8,6 +8,10 @@ insert into Product values(1, 'Gizmo', 19.99);
 insert into Product values(5, 'SuperGizmo', 49.99);
 
 update Product 
+set name = 'Gizmo' 
+where name = 'SuperGizmo';
+
+update Product 
 set price = 14.99 
 where name = 'Gizmo';
 
