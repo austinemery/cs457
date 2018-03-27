@@ -131,6 +131,16 @@ void Table::printQueryData( string query, string condition)
 		}
 	}
 
+	//get condition ready
+	string varToFind = condition.substr(0, condition.find_first_of(" "));
+	cout << "Var to Find: " << varToFind << endl;
+	
+	string operation = condition.substr(condition.find_first_of(" ") + 1, condition.find_last_of(" ") - condition.find_first_of(" "));
+	cout << "Operation: " << operation << endl;
+
+	string toFind = condition.substr(condition.find_last_of(" ") + 1, condition.length() - condition.find_last_of(" "));
+	cout << "To Find: " << toFind << endl;
+
 	//print query
 	for (int index = 0 ; index < metaData.size() ; index++)
 	{
