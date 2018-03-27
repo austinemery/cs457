@@ -27,6 +27,7 @@ class Table{
 		void addMetaCol( string );	//edits metadata on command
 		void addTuple( string );
 		void updateTuple( string );
+		void deleteTuple( string );
 		bool setMeta( string );		//sets meta data and returns status
 
 	private:
