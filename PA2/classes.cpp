@@ -317,22 +317,11 @@ void Table::deleteTuple( string givenData )
 	}
 
 	//delete tuple(s)
-	if(compSign == ">")
+	if(compSign == "=")
 	{
 		for (int i = 0; i < numbTuples; i++)
 		{
-			if (data[i][setIndex].compare(toDelete) < 0)
-			{
-				cout << "Erasing: " << data[i][1] << endl;
-				//data.erase(i);
-			}
-		}
-	}
-	else if(compSign == "<")
-	{
-		for (int i = 0; i < numbTuples; i++)
-		{
-			if (data[i][setIndex].compare(toDelete) > 0)
+			if (data[i][setIndex] == toDelete)
 			{
 				cout << "Erasing: " << data[i][1] << endl;
 				//data.erase(i);
@@ -341,12 +330,27 @@ void Table::deleteTuple( string givenData )
 	}
 	else
 	{
-		for (int i = 0; i < numbTuples; i++)
+		float dataNum = stof(toDelete, NULL);
+		if(compSign == ">")
 		{
-			if (data[i][setIndex] == toDelete)
+			for (int i = 0; i < numbTuples; i++)
 			{
-				cout << "Erasing: " << data[i][1] << endl;
-				//data.erase(i);
+				if (dataNum > stof(data[i][setIndex], NULL))
+				{
+					cout << "Erasing: " << data[i][1] << endl;
+					//data.erase(i);
+				}
+			}
+		}
+		else if(compSign == "<")
+		{
+			for (int i = 0; i < numbTuples; i++)
+			{
+				if (dataNum < stof(data[i][setIndex], NULL))
+				{
+					cout << "Erasing: " << data[i][1] << endl;
+					//data.erase(i);
+				}
 			}
 		}
 	}
