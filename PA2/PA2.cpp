@@ -445,6 +445,7 @@ void readDatabaseList(vector<Database>& databaseVec)
 	string tempString;
 	string tempDataBaseName;
 	string tempTableName;
+	vector<string> dataFromFile;
 
 	ifstream fin;
 	ifstream tableIn;
@@ -495,16 +496,63 @@ void readDatabaseList(vector<Database>& databaseVec)
 				exit(1);
 			}
 
+			//Read in all data from file
 			while (getline(tableMetaIn, tempString))
 			{
-				tempMetaData.push_back(tempString);
+				dataFromFile.push_back(tempString);
 			}
 
+			string assembleString ;
+			//Grab metadata
+			while ( dataFromFile[0][0] != '\0' )
+			{
+				if( dataFromFile[0][0] != '|')
+				{
+					assembleString += dataFromFile[0][0];
+				}
+				else
+				{
+					if( assembleString[0] == ' ')
+					{
+						assembleString.erase(0,1);
+					}
+					tempMetaData.push_back(assembleString);
+					assembleString.clear();
+				}
+
+				dataFromFile[0].erase(0,1);
+			}
+			if( assembleString[0] == ' ')
+			{
+				assembleString.erase(0,1);
+			}
+			//push last string
+			tempMetaData.push_back(assembleString);
+			
+			//create table with pulled meta
 			Table tempTable(tempTableName, tempDataBaseName, tempMetaData);
 			databaseVec[databaseIndex].addTable(tempTable);
-			tempMetaData.clear();
 
+			for( int i = 1 ; i < dataFromFile.size() ; i++ )
+			{
+				//Clean string to no longer have |
+				for( int j = 0 ; j < dataFromFile[i].size() ; j++ )
+				{
+					if( dataFromFile[i][j] == '|' )
+					{
+						dataFromFile[i].erase(j,2);
+					}
+				}
+
+				dataFromFile[i] += ' ';
+				databaseVec[globalWorkingDatabase].alterTable( "INSERT" , tempTableName , dataFromFile[i] );
+
+			}
+
+			tempMetaData.clear();
+			dataFromFile.clear();
 			tableMetaIn.close();
+
 		}
 		tableIn.close();
 		databaseIndex++;

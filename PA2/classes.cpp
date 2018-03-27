@@ -247,6 +247,8 @@ void Table::addTuple( string givenData )
 
 
 	numbTuples++;
+
+	//printData();
 }
 
 void Table::updateTuple( string givenData )
