@@ -243,7 +243,7 @@ int main()
 			
 			cin >> tableName; // Name of table
 
-			if (inputFromUser.find(";") != string::npos)
+			if (tableName.find(";") != string::npos)
 			{
 				tableName = tableName.substr(0, inputFromUser.length() - 1);
 			}
