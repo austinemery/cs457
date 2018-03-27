@@ -26,17 +26,17 @@ where name = 'Gizmo';
 select * from Product;
 
 --Delete data (20 points)
-delete from product 
+delete from Product 
 where name = 'Gizmo';
 
-delete from product 
+delete from Product 
 where price > 150;
 
 select * from Product;
 
 --Query subsets (10 points)
 select name, price 
-from product 
+from Product 
 where pid != 2;
 
 .exit

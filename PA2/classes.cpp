@@ -242,10 +242,8 @@ void Table::addTuple( string givenData )
 		assemblingData = "\0";
 	}
 
-
 	data.push_back(parsedTuple);
-
-
+	cout << "1 new record inserted." << endl;
 	numbTuples++;
 
 	//printData();
@@ -333,7 +331,7 @@ void Table::deleteTuple( string givenData )
 	//delete tuple(s)
 	int deleteCount = 0;
 
-	if(compSign == "=")
+	if(compSign == "=")	//equal to delete
 	{
 		for (int i = 0; i < numbTuples; i++)
 		{
@@ -345,10 +343,22 @@ void Table::deleteTuple( string givenData )
 			}
 		}
 	}
+	else if(compSign == "!=")	//not equal to delte
+	{
+		for (int i = 0; i < numbTuples; i++)
+		{
+			if (data[i][setIndex] != toDelete)
+			{
+				data.erase(data.begin() + i);
+				numbTuples--;
+				deleteCount++;
+			}
+		}
+	}
 	else
 	{
-		float dataNum = stof(toDelete, NULL);
-		if(compSign == ">")
+		float dataNum = stof(toDelete, NULL);	//sets to float if a number is compared
+		if(compSign == ">")	//greater than delete
 		{
 			for (int i = 0; i < numbTuples; i++)
 			{
@@ -360,11 +370,35 @@ void Table::deleteTuple( string givenData )
 				}
 			}
 		}
-		else if(compSign == "<")
+		else if(compSign == ">=")	//greater than delete
+		{
+			for (int i = 0; i < numbTuples; i++)
+			{
+				if (dataNum <= stof(data[i][setIndex], NULL))
+				{
+					data.erase(data.begin() + i);
+					numbTuples--;
+					deleteCount++;
+				}
+			}
+		}
+		else if(compSign == "<")	//less than delete
 		{
 			for (int i = 0; i < numbTuples; i++)
 			{
 				if (dataNum > stof(data[i][setIndex], NULL))
+				{
+					data.erase(data.begin() + i);
+					numbTuples--;
+					deleteCount++;
+				}
+			}
+		}
+		else if(compSign == "<=")	//less than delete
+		{
+			for (int i = 0; i < numbTuples; i++)
+			{
+				if (dataNum >= stof(data[i][setIndex], NULL))
 				{
 					data.erase(data.begin() + i);
 					numbTuples--;
