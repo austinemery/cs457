@@ -217,8 +217,29 @@ int main()
 		}
 		else if ( (inputFromUser.find("SELECT") != string::npos) || (inputFromUser.find("select") != string::npos))
 		{
-			cin >> inputFromUser; // toss * we'll use this later
-			cin >> inputFromUser; // toss FROM we'll use this later
+			string stringsToQuery;
+			string tempString;
+			string printFlag = "all";
+
+			cin >> inputFromUser;
+			if (inputFromUser.find("*") == string::npos)
+			{
+				stringsToQuery = inputFromUser;
+				while (stringsToQuery.find("FROM") == string::npos && stringsToQuery.find("from") == string::npos)
+				{
+					cin >> tempString;
+					stringsToQuery += tempString;
+				}
+
+				//remove "from" from stringsToQuery
+				stringsToQuery = stringsToQuery.substr(0, stringsToQuery.length() - 4);
+				printFlag = "some";
+			}
+			else
+			{
+				cin >> inputFromUser; // toss FROM we'll use this later
+			}
+			
 			cin >> inputFromUser; // Name of table
 
 			if (inputFromUser.find(";") != string::npos)
@@ -228,7 +249,7 @@ int main()
 
 			if( databaseList[globalWorkingDatabase].hasTable(inputFromUser))
 			{
-				databaseList[globalWorkingDatabase].printTable(inputFromUser);
+				databaseList[globalWorkingDatabase].printTable(inputFromUser, printFlag, stringsToQuery);
 			}
 			else
 			{
