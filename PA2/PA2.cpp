@@ -395,6 +395,7 @@ int main()
 //***********************//			
 		else if ( (inputFromUser.find("DELETE") != string::npos) || (inputFromUser.find("delete") != string::npos) )
 		{
+			inputFromUser = "delete";
 			string moreInput, tableName, toDelete, varToDelete;
 			cin >> moreInput;
 			cin >> tableName;
@@ -403,8 +404,7 @@ int main()
 			if (moreInput == "where")
 			{
 				cin >> varToDelete;
-				//for equal sign
-				cin >> moreInput;
+				cin >> moreInput;	//for equal sign
 				cin >> toDelete;
 			
 				//get rid of quotes if needed
@@ -784,8 +784,8 @@ void alterTable( vector<Database>& databaseVec , string nameOfTable , string com
 
 		//fout << metaDataInQuestion << endl;
 		fout.close();
-
-		cout << "Table " << nameOfTable << " has been altered." << endl;
+		
+		// 	cout << "Table " << nameOfTable << " has been altered." << endl;
 	}
 	else
 	{

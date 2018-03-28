@@ -1,3 +1,1 @@
 pid int | name varchar(20) | price float
-2 | PowerGizmo | 29.99
-1 | Gizmo | 19.99
