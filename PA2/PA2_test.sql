@@ -1,5 +1,5 @@
 --CS457 PA2
-
+DROP DATABASE CS457_PA2;
 --Construct the database and table (0 points; expected to work from PA1)
 CREATE DATABASE CS457_PA2;
 USE CS457_PA2;
