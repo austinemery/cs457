@@ -272,14 +272,12 @@ int main()
 			else
 			{
 				cin >> inputFromUser;
-				undercased(inputFromUser);
 				if (inputFromUser == "where")
 				{
 					//grab whole condition
 					while (condition.find(';') == string::npos)
 					{
 						cin >> inputFromUser;
-						undercased(inputFromUser);
 
 						condition += (inputFromUser + " ");
 					}

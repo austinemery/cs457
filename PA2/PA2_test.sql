@@ -26,11 +26,11 @@ where name = 'Gizmo';
 select * from Product;
 
 --Delete data (20 points)
-delete from Product 
-where name = 'Gizmo';
+delete from PRODUCt 
+Where name = 'Gizmo';
 
-delete from Product 
-where price > 150;
+deLete from product 
+wheRe price > 150;
 
 select * from Product;
 
