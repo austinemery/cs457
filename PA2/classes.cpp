@@ -268,6 +268,8 @@ void Table::addTuple( string givenData )
 
 void Table::updateTuple( string givenData )
 {
+	int numbChanges = 0;
+
 	//givenData order - varToFind, toFind, varToSet, toSet
 
 	//parse givenData
@@ -311,8 +313,19 @@ void Table::updateTuple( string givenData )
 		if (data[i][findIndex] == toFind)
 		{
 			data[i][setIndex] = toSet;
+			numbChanges++;
 			//cout << "The Data: " << data[i][setIndex] << endl;
 		}
+	}
+
+	//print how many records modified
+	if (numbChanges == 1)
+	{
+		cout << "1 record modified." << endl;
+	}
+	else
+	{
+		cout << numbChanges << " records modified." << endl;
 	}
 }
 
