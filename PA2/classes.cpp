@@ -94,7 +94,7 @@ void Table::printData()
 
 void Table::printQueryData( string query, string condition)
 {
-	//cout commas
+	//count commas
 	int commaCount = 0;
 	for (int i = 0; i < query.length(); i++)
 	{
@@ -104,7 +104,18 @@ void Table::printQueryData( string query, string condition)
 		}
 	}
 
+	//get condition ready
+	string varToFind = condition.substr(0, condition.find_first_of(" "));
+	//cout << "Var to Find: " << varToFind << endl;
+	
+	string operation = condition.substr(condition.find_first_of(" ") + 1, condition.find_last_of(" ") - condition.find_first_of(" ") - 1);
+	//cout << "Operation: " << operation << endl;
+
+	string toFind = condition.substr(condition.find_last_of(" ") + 1, condition.length() - condition.find_last_of(" "));
+	//cout << "To Find: " << toFind << endl;
+
 	vector<int> indexVec;
+	int varToFindIndex;
 
 	for (int i = 0; i < commaCount; i++)
 	{
@@ -131,17 +142,16 @@ void Table::printQueryData( string query, string condition)
 		}
 	}
 
-	//get condition ready
-	string varToFind = condition.substr(0, condition.find_first_of(" "));
-	cout << "Var to Find: " << varToFind << endl;
-	
-	string operation = condition.substr(condition.find_first_of(" ") + 1, condition.find_last_of(" ") - condition.find_first_of(" "));
-	cout << "Operation: " << operation << endl;
+	//grab conditional index to look for
+	for (int j = 0; j < numbAtt; j++)
+	{
+		if (metaData[j].find(varToFind) != string::npos)
+		{
+			varToFindIndex = j;
+		}
+	}
 
-	string toFind = condition.substr(condition.find_last_of(" ") + 1, condition.length() - condition.find_last_of(" "));
-	cout << "To Find: " << toFind << endl;
-
-	//print query
+	//print metadata
 	for (int index = 0 ; index < metaData.size() ; index++)
 	{
 		for (int jindex = 0; jindex < indexVec.size(); jindex++)
@@ -160,21 +170,28 @@ void Table::printQueryData( string query, string condition)
 		}
 	}
 
+	//print data. The operation is check first, to see if it is true or not, then it will query the appropriate attributes
 	for (int index = 0 ; index < numbTuples ; index++)
 	{
 		for (int jindex = 0 ; jindex < numbAtt ; jindex++)
 		{
 			for (int kindex = 0; kindex < indexVec.size(); kindex++)
 			{
-				if (jindex == indexVec[kindex])
+				if (operation == "!=")
 				{
-					if( jindex == (numbAtt - 1) )
+					if (data[index][varToFindIndex] != toFind)
 					{
-						cout << data[index][jindex] << endl;
-					}
-					else
-					{
-						cout << data[index][jindex] << " | ";				
+						if (jindex == indexVec[kindex])
+						{
+							if( jindex == (numbAtt - 1) )
+							{
+								cout << data[index][jindex] << endl;
+							}
+							else
+							{
+								cout << data[index][jindex] << " | ";				
+							}
+						}
 					}
 				}
 			}

@@ -260,7 +260,7 @@ int main()
 						condition += (inputFromUser + " ");
 					}
 					condition.erase(condition.find_last_of(';'));
-					cout << "condition after erase: " << condition << endl;
+					//cout << "condition after erase: " << condition << endl;
 				}
 			}
 
