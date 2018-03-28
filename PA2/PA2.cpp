@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <time.h>
 #include <stdlib.h>
+#include <cctype>
 #include "classes.h"
 
 using namespace std;
@@ -104,6 +105,14 @@ void deleteTable( vector<Database>& databaseVec , string tableName );
 */
 void alterTable( vector<Database>& databaseVec , string nameOfTable , string command , string metaDataInQuestion );
 
+/**	@fn void undercased
+*	@brief causes all the letters in a string to be undercase
+*	@pre requires existing string
+*	@post editted string with all letters undercase
+*	@return void
+*/
+void undercased(string& givenString);
+
 int main()
 {
 	//general variables
@@ -127,8 +136,9 @@ int main()
 	do
 	{
 		cin >> inputFromUser;
+		undercased(inputFromUser);
 
-		if (inputFromUser == "COMMANDS")
+		if (inputFromUser == "commands")
 		{
 			cout << endl << "--Command List--" << endl;
 			cout << "listDatabases - Prints all directories" << endl;
@@ -142,7 +152,7 @@ int main()
 			cout << "SELECT * FROM <name>; - Prints data of table" << endl;
 			cout << ".EXIT - ends the program" << endl;
 		}
-		else if (inputFromUser.find("listD") != string::npos)
+		else if (inputFromUser.find("listd") != string::npos)
 		{
 			listDatabases(databaseList);
 		}
@@ -150,27 +160,31 @@ int main()
 		{
 			
 		}
-		else if (inputFromUser.find("printW") != string::npos)
+		else if (inputFromUser.find("printw") != string::npos)
 		{
 			printWorkingDatabase(databaseList);
 		}
-		else if ( (inputFromUser.find("CREATE") != string::npos) || (inputFromUser.find("create") != string::npos))
+		else if ((inputFromUser.find("create") != string::npos))
 		{
 			cin >> inputFromUser;
-			
-			if ( (inputFromUser.find("DATABASE") != string::npos) || (inputFromUser.find("database") != string::npos))
+			undercased(inputFromUser);
+
+			if ((inputFromUser.find("database") != string::npos))
 			{	
 				cin >> inputFromUser;
+				undercased(inputFromUser);
 				createDatabase(databaseList, inputFromUser.substr(0, inputFromUser.length() - 1));
 			}
-			else if ( (inputFromUser.find("TABLE") != string::npos) || (inputFromUser.find("table") != string::npos))//CREATE TABLE tbl_1 (a1 int, a2 varchar(20)); 
+			else if ((inputFromUser.find("table") != string::npos))//CREATE TABLE tbl_1 (a1 int, a2 varchar(20)); 
 			{
 				cin >> tempTableName;
-				
+				undercased(tempTableName);
+
 				vector<string> userGivenMetaData;
 				int commaCount = 0;
 
 				getline(cin, inputFromUser);
+
 
 				//find how many commas exist
 				for (int i = 0; i < inputFromUser.size(); ++i)
@@ -200,22 +214,28 @@ int main()
 				createTable(databaseList, tempTableName , userGivenMetaData);
 			}		
 		}
-		else if ( (inputFromUser.find("DROP") != string::npos) || (inputFromUser.find("drop") != string::npos))
+		else if ((inputFromUser.find("drop") != string::npos))
 		{
 			cin >> inputFromUser;
-			if ( (inputFromUser.find("DATABASE") != string::npos) || (inputFromUser.find("database") != string::npos))
+			undercased(inputFromUser);
+
+			if ((inputFromUser.find("database") != string::npos))
 			{	
 				cin >> inputFromUser;
+				undercased(inputFromUser);
+
 				deleteDatabase(databaseList, inputFromUser.substr(0, inputFromUser.length() - 1));
 			}
-			else if ( (inputFromUser.find("TABLE") != string::npos) || (inputFromUser.find("table") != string::npos))
+			else if ((inputFromUser.find("table") != string::npos))
 			{
 				//do something
 				cin >> inputFromUser;
+				undercased(inputFromUser);
+
 				deleteTable(databaseList, inputFromUser.substr(0,inputFromUser.length()-1));
 			}	
 		}
-		else if ( (inputFromUser.find("SELECT") != string::npos) || (inputFromUser.find("select") != string::npos))
+		else if ((inputFromUser.find("select") != string::npos))
 		{
 			string stringsToQuery, tableName;
 			string tempString;
@@ -223,10 +243,11 @@ int main()
 			string condition;
 
 			cin >> inputFromUser;
+			undercased(inputFromUser);
 			if (inputFromUser.find("*") == string::npos)
 			{
 				stringsToQuery = inputFromUser;
-				while (stringsToQuery.find("FROM") == string::npos && stringsToQuery.find("from") == string::npos)
+				while (stringsToQuery.find("from") == string::npos)
 				{
 					cin >> tempString;
 					stringsToQuery += tempString;
@@ -242,7 +263,7 @@ int main()
 			}
 			
 			cin >> tableName; // Name of table
-
+			undercased(tableName);
 			if (tableName.find(";") != string::npos)
 			{
 				tableName.erase(tableName.length() - 1, 1);
@@ -251,12 +272,15 @@ int main()
 			else
 			{
 				cin >> inputFromUser;
+				undercased(inputFromUser);
 				if (inputFromUser == "where")
 				{
 					//grab whole condition
 					while (condition.find(';') == string::npos)
 					{
 						cin >> inputFromUser;
+						undercased(inputFromUser);
+
 						condition += (inputFromUser + " ");
 					}
 					condition.erase(condition.find_last_of(';'));
@@ -273,18 +297,21 @@ int main()
 				cout << "--!Failed to query table " << inputFromUser << " because it does not exist." << endl;
 			}
 		}
-		else if ( (inputFromUser.find("USE") != string::npos) || (inputFromUser.find("use") != string::npos))
+		else if ((inputFromUser.find("use") != string::npos))
 		{
 			cin >> inputFromUser;
+			undercased(inputFromUser);
 			changeWorkingDatabase(databaseList, inputFromUser.substr(0, inputFromUser.length() - 1));
 		}
-		else if ( (inputFromUser.find("ALTER") != string::npos) || (inputFromUser.find("alter") != string::npos))
+		else if ((inputFromUser.find("alter") != string::npos))
 		{
 			cin >> inputFromUser;
-			if( (inputFromUser.find("TABLE") != string::npos) || (inputFromUser.find("table") != string::npos))
+			undercased(inputFromUser);
+			if((inputFromUser.find("table") != string::npos))
 			{
 				//ALTER TABLE tbl_1 ADD a3 float;
 				cin >> nameOfTable;
+				undercased(nameOfTable);
 				cin >> command;
 				cin >> metaDataInQuestion;
 				cin >> inputFromUser;
@@ -294,7 +321,7 @@ int main()
 				alterTable( databaseList , nameOfTable , command , metaDataInQuestion );
 			}
 		}
-		else if ( (inputFromUser.find("INSERT") != string::npos) || (inputFromUser.find("insert") != string::npos) )
+		else if ((inputFromUser.find("insert") != string::npos) )
 		{
 			string grab;
 			string holdData = "\0";
@@ -304,6 +331,7 @@ int main()
 			command = inputFromUser;
 			cin >> inputFromUser; //toss 'into'
 			cin >> nameOfTable;
+			undercased(nameOfTable);
 
 			do
 			{
@@ -345,11 +373,13 @@ int main()
 			alterTable( databaseList , nameOfTable , command , grab );
 			
 		}
-		else if ( (inputFromUser.find("UPDATE") != string::npos) || (inputFromUser.find("update") != string::npos) )
+		else if ((inputFromUser.find("update") != string::npos) )
 		{
 			string moreInput, tableName, toFind, toSet, varToFind, varToSet;
 			cin >> tableName;
+			undercased(tableName);
 			cin >> moreInput;
+			undercased(moreInput);
 
 			//parse the command
 			if (moreInput == "set")
@@ -366,6 +396,7 @@ int main()
 				}
 
 				cin >> moreInput;
+				undercased(moreInput);
 				if (moreInput == "where")
 				{
 					cin >> varToFind;
@@ -393,13 +424,14 @@ int main()
 //***********************//
 //BEGIN DELETE ALTERATION//
 //***********************//			
-		else if ( (inputFromUser.find("DELETE") != string::npos) || (inputFromUser.find("delete") != string::npos) )
+		else if ((inputFromUser.find("delete") != string::npos) )
 		{
-			inputFromUser = "delete";
 			string moreInput, tableName, toDelete, varToDelete;
 			cin >> moreInput;
 			cin >> tableName;
+			undercased(tableName);
 			cin >> moreInput;
+			undercased(moreInput);
 			//parse the command
 			if (moreInput == "where")
 			{
@@ -424,7 +456,7 @@ int main()
 // END DELETE ALTERATION //
 //***********************//
 
-		else if ( inputFromUser == ".EXIT" || inputFromUser == ".exit")
+		else if (inputFromUser == ".exit")
 		{
 			//not supposed to do anything! this way we can leave the loop without an issue.
 			cout << "All done." << endl;
@@ -434,11 +466,24 @@ int main()
 			cout << "--ERROR: Command not found, type commands for list--" << endl;
 		}
 
-	}while ( inputFromUser != ".EXIT" && inputFromUser != ".exit" );
+	}while ( inputFromUser != ".exit" );
 
 	updateDatabaseList(databaseList);
 }
+//change keyword to UPPERCASE
+void undercased(string& givenString)
+{
+	for (int i=0; givenString[i]; i++) 
+	{
+		//handle '.exit'
+		if( givenString[i] != '.' )
+		{
+			givenString[i] = tolower(givenString[i]);
+		}
+	}
 
+	cout << "Recently lowered: " << givenString << endl;
+}
 //read in the database list
 void readDatabaseList(vector<Database>& databaseVec)
 {
@@ -545,7 +590,7 @@ void readDatabaseList(vector<Database>& databaseVec)
 				}
 
 				dataFromFile[i] += ' ';
-				databaseVec[globalWorkingDatabase].alterTable( "INSERT" , tempTableName , dataFromFile[i] );
+				databaseVec[globalWorkingDatabase].alterTable( "insert" , tempTableName , dataFromFile[i] );
 
 			}
 

@@ -519,19 +519,19 @@ void Database::alterTable( string command, string whichTable , string givenMeta 
 		}
 	}
 
-	if( command == "ADD" || command == "add" )
+	if( command == "add" )
 	{
 		tableData[tableIndex].addMetaCol( givenMeta );
 	}
-	else if( command == "INSERT" || command == "insert" )
+	else if( command == "insert" )
 	{
 		tableData[tableIndex].addTuple( givenMeta );
 	}
-	else if( command == "UPDATE" || command == "update" )
+	else if( command == "update" )
 	{
 		tableData[tableIndex].updateTuple( givenMeta );
 	}
-	else if( command == "DELETE" || command == "delete" )
+	else if( command == "delete" )
 	{
 		tableData[tableIndex].deleteTuple( givenMeta );
 	}
