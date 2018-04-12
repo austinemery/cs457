@@ -158,7 +158,7 @@ int main()
 		}
 		else if (inputFromUser.find("--") != string::npos)
 		{
-			
+			getline(cin, inputFromUser);
 		}
 		else if (inputFromUser.find("printw") != string::npos)
 		{
@@ -479,8 +479,6 @@ void undercased(string& givenString)
 			givenString[i] = tolower(givenString[i]);
 		}
 	}
-
-	cout << "Recently lowered: " << givenString << endl;
 }
 //read in the database list
 void readDatabaseList(vector<Database>& databaseVec)
@@ -660,7 +658,7 @@ void createDatabase(vector<Database>& databaseVec, string databaseName)
 		globalWorkingDatabase = databaseVec.size()-1;
 
 		updateDatabaseList(databaseVec);
-		cout << "--Database " << databaseVec[databaseVec.size()-1].getName() << " created." << endl;
+		cout << "Database " << databaseVec[databaseVec.size()-1].getName() << " created." << endl;
 	} 
 	else
 	{
@@ -691,7 +689,7 @@ void deleteDatabase(vector<Database>& databaseVec, string databaseName)
 			cout << "--ERROR: Could not delete database--" << endl;
 		}
 
-		cout << "--Database " << databaseName << " deleted." << endl;
+		cout << "Database " << databaseName << " deleted." << endl;
 	}
 
 	if (globalWorkingDatabase == checkInt || (databaseVec.size() == 0) )
@@ -748,7 +746,7 @@ void changeWorkingDatabase(vector<Database>& databaseVec, string newDatabase)
 	if (databaseExistance(databaseVec, newDatabase) != -1)
 	{
 		globalWorkingDatabase = databaseExistance(databaseVec, newDatabase);
-		cout << "--Using database " << newDatabase << "." << endl;
+		cout << "Using database " << newDatabase << "." << endl;
 	}
 	else
 	{
@@ -762,7 +760,7 @@ void deleteTable( vector<Database>& databaseVec , string tableName )
 	{
 		databaseVec[globalWorkingDatabase].deleteTable(tableName);
 		system(("rm -r ./data/" + databaseVec[globalWorkingDatabase].getName() + "/" + tableName).c_str());
-		cout << "--Table " << tableName << " deleted." << endl;
+		cout << "Table " << tableName << " deleted." << endl;
 	}
 	else
 	{
@@ -799,7 +797,7 @@ void createTable(vector<Database>& databaseVec, string tableName, vector<string>
 			databaseVec[globalWorkingDatabase].addTable( holdTable );
 
 			//databaseVec[globalWorkingDatabase].printTable(tableName);
-			cout << "--Table " << tableName << " created." << endl;
+			cout << "Table " << tableName << " created." << endl;
 		}
 		else
 		{

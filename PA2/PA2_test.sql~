@@ -1,5 +1,5 @@
 --CS457 PA2
-
+DROP DATABASE CS457_PA2;
 --Construct the database and table (0 points; expected to work from PA1)
 CREATE DATABASE CS457_PA2;
 USE CS457_PA2;
@@ -26,17 +26,17 @@ where name = 'Gizmo';
 select * from Product;
 
 --Delete data (20 points)
-delete from product 
-where name = 'Gizmo';
+delete from PRODUCt 
+Where name = 'Gizmo';
 
-delete from product 
-where price > 150;
+deLete from product 
+wheRe price > 150;
 
 select * from Product;
 
 --Query subsets (10 points)
 select name, price 
-from product 
+from Product 
 where pid != 2;
 
 .exit
