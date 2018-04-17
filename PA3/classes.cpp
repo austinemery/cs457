@@ -34,17 +34,19 @@ Table::Table( const Table& givenTable )
 	numbTuples = givenTable.numbTuples;
 	numbAtt = givenTable.numbAtt;
 	metaData.clear();
+
 	if( &givenTable != this )
 	{
 		name = givenTable.name;
 		databaseName = givenTable.databaseName;
+
 		for ( int i = 0; i < givenTable.metaData.size(); i++)
 		{
 			metaData.push_back(givenTable.metaData[i]);
 		}
 
 		for( int i = 0 ; i < givenTable.numbTuples ; i++ )
-		{
+		{	
 			for( int j = 0 ; j < givenTable.numbAtt ; j++ )
 			{
 				data[i][j] = givenTable.data[i][j];
@@ -87,7 +89,6 @@ void Table::printData()
 			{
 				cout << data[index][jndex] << " | ";				
 			}
-
 		}
 	}
 }
@@ -586,10 +587,10 @@ string Database::getName()
 }
 void Database::addTable( Table& givenTable )
 {
-cout << "I'm in addTable trying to add: |" << givenTable.getName() << "|" << endl;
+cout << "I'm in addTable trying to add: |" << givenTable.getName() << "|" << "REEE:" <<  tableData.size() << endl;
 givenTable.printData();
-	tableData.push_back( givenTable );
-cout << "Leaving addTable" << endl;
+	tableData.push_back(givenTable);
+cout << endl << "Leaving addTable" << endl;
 }
 void Database::deleteTable( string tableToDelete )
 {

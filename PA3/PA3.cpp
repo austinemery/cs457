@@ -620,7 +620,7 @@ BUG IS UNDER HERE SOMEWHERE
 ***************/
 		while (tableIn >> tempTableName)
 		{
-cout << "Table name we're investigating: " << tempTableName << endl;
+cout << "Table name we're investigating: |" << tempTableName << "|" << endl;
 			tableMetaIn.open(("./data/" + tempDataBaseName + "/" + tempTableName).c_str());
 
 			if (!tableMetaIn.is_open())
@@ -668,8 +668,11 @@ cout << "Isolated piece of meta: |" << assembleString << "|" << endl;
 			tempMetaData.push_back(assembleString);
 cout << "Isolated piece of meta 2: |" << assembleString << "|" << endl;			
 			//create table with pulled meta
+			cout << "DATABASE SIZE: " << databaseIndex << endl;
 			Table tempTable(tempTableName, tempDataBaseName, tempMetaData);
+
 			databaseVec[databaseIndex].addTable(tempTable);
+
 cout << "Just pushed table: " << tempTable.getName() << endl;
 			for( int i = 1 ; i < dataFromFile.size() ; i++ )
 			{
