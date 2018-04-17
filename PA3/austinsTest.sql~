@@ -1,5 +1,3 @@
-DROP DATABASE CS457_PA3;
-
 --Construct the database and table (0 points; expected to work from PA1)
 CREATE DATABASE CS457_PA3;
 

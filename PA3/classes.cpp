@@ -746,6 +746,7 @@ int Database::getTableIndex( string givenTable )
 
 	return i;
 }
+
 void Database::innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt )
 {
 	int indexLeftTable = getTableIndex( leftTableName );
@@ -753,15 +754,25 @@ void Database::innerJoin( string joinSelection , string leftTableName , string r
 	int indexLeftAtt = tableData[indexLeftTable].getMetaIndex( leftAtt );
 	int indexRightAtt = tableData[indexRightTable].getMetaIndex( rightAtt );
 
-}
+	for( int index = 0 ; index < tableData[indexLeftTable].numbAtt ; index++ )
+	{
+		cout << tableData[indexLeftTable].metaData[index] << " | ";
+	}
+	for( int jndex = 0 ; jndex < tableData[indexRightTable].numbAtt ; jndex++ )
+	{
 
-void Database::leftJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt )
-{
-	int indexLeftTable = getTableIndex( leftTableName );
-	int indexRightTable = getTableIndex( rightTableName );
-	int indexLeftAtt = tableData[indexLeftTable].getMetaIndex( leftAtt );
-	int indexRightAtt = tableData[indexRightTable].getMetaIndex( rightAtt );
+		if( jndex != ( tableData[indexRightTable].numbAtt-1 ))
+		{
+			cout << tableData[indexRightAtt].metaData[jndex] << " | ";
+		}else
+		{
+			cout << tableData[indexRightAtt].metaData[jndex];
+		}
+	}
 
-	vector<string> tempMetaData;
-	Table tempJoin("databaseName", "tableName", tempMetaData)
+
+	//for the attribute of interest in the left table
+		//for the attribute of interest in the right table
+			//If the right tuple at the rightAtt == left tupe at the leftAtt
+				//Print both tuples
 }

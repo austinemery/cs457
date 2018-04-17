@@ -39,6 +39,8 @@ class Table{
 		string databaseName;		//Name of associated database
 		vector<string> metaData;	//vector of the column types
 		vector < vector <string> > data;
+
+		friend class Database;
 };
 
 class Database{
