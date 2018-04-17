@@ -540,7 +540,16 @@ string Table::getDatabaseName()
 {
 	return databaseName;
 }
+int Table::getMetaIndex( string givenMeta )
+{
+	int i = 0;
+	while( givenMeta != metaData[i] )
+	{
+		i++;
+	}
 
+	return i;
+}
 
 /*
  * Class Implementation
@@ -727,7 +736,22 @@ void Database::listTables()
 		cout << tableData[index].getName() << endl;	
 	}
 }
+int Databse::getTableIndex( string givenTable )
+{
+	int i = 0;
+	while( givenTable != tableData[i].name )
+	{
+		i++;
+	}
+
+	return i;
+}
 void Database::innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt )
 {
+
+	int indexLeftTable = getTableIndex( leftTableName );
+	int indexRightTable = getTableIndex( rightTableName );
+	int indexLeftAtt = getMetaIndex( leftAtt );
+	int indexRightAtt = getMetaIndex( rightAtt );
 
 }
