@@ -736,10 +736,10 @@ void Database::listTables()
 		cout << tableData[index].getName() << endl;	
 	}
 }
-int Databse::getTableIndex( string givenTable )
+int Database::getTableIndex( string givenTable )
 {
 	int i = 0;
-	while( givenTable != tableData[i].name )
+	while( givenTable != tableData[i].getName() )
 	{
 		i++;
 	}
@@ -751,7 +751,7 @@ void Database::innerJoin( string joinSelection , string leftTableName , string r
 
 	int indexLeftTable = getTableIndex( leftTableName );
 	int indexRightTable = getTableIndex( rightTableName );
-	int indexLeftAtt = getMetaIndex( leftAtt );
-	int indexRightAtt = getMetaIndex( rightAtt );
+	int indexLeftAtt = tableData[indexLeftTable].getMetaIndex( leftAtt );
+	int indexRightAtt = tableData[indexRightTable].getMetaIndex( rightAtt );
 
 }
