@@ -769,10 +769,4 @@ void Database::innerJoin( string joinSelection , string leftTableName , string r
 			cout << tableData[indexRightAtt].metaData[jndex];
 		}
 	}
-
-
-	//for the attribute of interest in the left table
-		//for the attribute of interest in the right table
-			//If the right tuple at the rightAtt == left tupe at the leftAtt
-				//Print both tuples
 }
