@@ -755,25 +755,51 @@ void Database::innerJoin( string joinSelection , string leftTableName , string r
 
 	for( int index = 0 ; index < tableData[indexLeftTable].numbAtt ; index++ )
 	{
-		cout << tableData[indexLeftTable].metaData[index] << " | ";
+	
+		cout << tableData[indexLeftTable].metaData[index] << "|";
 	}
 	for( int jndex = 0 ; jndex < tableData[indexRightTable].numbAtt ; jndex++ )
 	{
 
 		if( jndex != ( tableData[indexRightTable].numbAtt-1 ))
 		{
-			cout << tableData[indexRightAtt].metaData[jndex] << " | ";
+			cout << tableData[indexRightAtt].metaData[jndex] << "|";
 		}else
 		{
 			cout << tableData[indexRightAtt].metaData[jndex];
-		}
+		} cout << endl;
 	}
 
 
 	//for the attribute of interest in the left table
+	for( int index = 0 ; index < tableData[indexLeftTable].numbTuples ; index++ )
+	{
 		//for the attribute of interest in the right table
+		for( int jndex = 0 ; jndex < tableData[indexRightTable].numbTuples ; jndex++ )
+		{
 			//If the right tuple at the rightAtt == left tupe at the leftAtt
-				//Print both tuples
+			if( tableData[indexLeftTable].data[index][indexLeftAtt] == tableData[indexRightTable].data[jndex][indexRightAtt] )
+			{
+				//Print both tuples				
+				for( int leftTableTupleIndex = 0 ; leftTableTupleIndex < tableData[indexLeftTable].numbAtt ; leftTableTupleIndex++ )
+				{
+					cout << tableData[indexLeftTable].data[index][leftTableTupleIndex] << "|";
+				}
+				for( int rightTableTupleIndex = 0 ; rightTableTupleIndex < tableData[indexRightTable].numbAtt ; rightTableTupleIndex++ )
+				{
+					if( rightTableTupleIndex != ( tableData[indexRightTable].numbAtt-1 ))
+					{
+						cout << tableData[indexRightAtt].data[jndex][rightTableTupleIndex] << "|";
+					}
+					else
+					{
+						cout << tableData[indexRightAtt].data[jndex][rightTableTupleIndex];
+					} cout << endl;					
+				}
+			
+			}
+		}
 
+	}
 
 }
