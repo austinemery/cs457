@@ -138,8 +138,9 @@ cout << "Above readDatabaseList()" << endl;
 	{
 		cin >> inputFromUser;
 
+		undercased(inputFromUser);
+
 		cout << "I'm starting with this information: " << inputFromUser << endl;
-		return 0;
 
 		if (inputFromUser == "commands")
 		{
@@ -381,8 +382,6 @@ cout << "Above readDatabaseList()" << endl;
 					}
 				}
 			}
-
-
 		}
 		else if ((inputFromUser.find("use") != string::npos))
 		{
@@ -457,8 +456,7 @@ cout << "Above readDatabaseList()" << endl;
 			}
 
 			databaseList[globalWorkingDatabase].alterTable( command , nameOfTable , grab );
-			alterTable( databaseList , nameOfTable , command , grab );
-			
+			alterTable( databaseList , nameOfTable , command , grab );		
 		}
 		else if ((inputFromUser.find("update") != string::npos) )
 		{
@@ -637,7 +635,7 @@ cout << "Table name we're investigating: " << tempTableName << endl;
 				dataFromFile.push_back(tempString);
 			}
 
-			string assembleString ;
+			string assembleString;
 			//Grab metadata
 			while ( dataFromFile[0][0] != '\0' )
 			{
@@ -651,7 +649,11 @@ cout << "Table name we're investigating: " << tempTableName << endl;
 					{
 						assembleString.erase(0,1);
 					}
-cout << "Isolated piece of meta: " << assembleString << endl;
+					if( assembleString[assembleString.length() - 1] == ' ')
+					{
+						assembleString.erase(assembleString.length() - 1, 1);
+					}
+cout << "Isolated piece of meta: |" << assembleString << "|" << endl;
 					tempMetaData.push_back(assembleString);
 					assembleString.clear();
 				}
@@ -664,7 +666,7 @@ cout << "Isolated piece of meta: " << assembleString << endl;
 			}
 			//push last string
 			tempMetaData.push_back(assembleString);
-cout << "Isolated piece of meta: " << assembleString << endl;			
+cout << "Isolated piece of meta 2: |" << assembleString << "|" << endl;			
 			//create table with pulled meta
 			Table tempTable(tempTableName, tempDataBaseName, tempMetaData);
 			databaseVec[databaseIndex].addTable(tempTable);

@@ -586,7 +586,7 @@ string Database::getName()
 }
 void Database::addTable( Table& givenTable )
 {
-cout << "I'm in addTable trying to add: " << givenTable.getName() << endl;
+cout << "I'm in addTable trying to add: |" << givenTable.getName() << "|" << endl;
 givenTable.printData();
 	tableData.push_back( givenTable );
 cout << "Leaving addTable" << endl;
