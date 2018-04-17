@@ -717,7 +717,7 @@ void Database::updateTableList()
 		fout << tableData[i].getName() << endl;
 	}
 
-	fout.close();
+	fout.close();f
 }
 
 void Database::listTables()
@@ -730,4 +730,10 @@ void Database::listTables()
 void Database::innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt )
 {
 
+}
+
+void Database::leftJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt )
+{
+	vector<string> tempMetaData;
+	Table tempJoin("databaseName", "tableName", tempMetaData)
 }

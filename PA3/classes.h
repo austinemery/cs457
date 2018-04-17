@@ -59,6 +59,7 @@ class Database{
 		ofstream& printTableFile( string , ofstream& );
 		void listTables();
 		void innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt );
+		void leftJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt );
 
 	private:
 		string name;				//name of database
