@@ -354,7 +354,7 @@ int main()
 						undercased(leftTable);
 						undercased(rightTable);
 
-						cout << "|" << leftTable << "|" << rightTable << "|" << leftAttribute << "|" << rightAttribute << "|" << endl;
+						//cout << "|" << leftTable << "|" << rightTable << "|" << leftAttribute << "|" << rightAttribute << "|" << endl;
 
 						databaseList[globalWorkingDatabase].innerJoin("*", leftTable, rightTable, leftAttribute, rightAttribute);
 					}
@@ -362,6 +362,19 @@ int main()
 					else if (joinString.find("outer") != string::npos)
 					{
 						//cout << "OUTER" << endl;
+						string newStringWithoutLastChar = joinString.substr(0, joinString.find_last_of(" "));
+		
+						string leftTable = joinString.substr(0, joinString.find_first_of(" "));
+						string rightTable = newStringWithoutLastChar.substr(newStringWithoutLastChar.find_last_of(" ") + 1, (newStringWithoutLastChar.length() - newStringWithoutLastChar.find_last_of(" ")));
+						string leftAttribute = condition.substr(condition.find_first_of(".") + 1, (condition.find_first_of(" ") - condition.find_first_of(".") - 1));
+						string rightAttribute = condition.substr(condition.find_last_of(".") + 1, (condition.length() - condition.find_last_of(".")));
+
+						undercased(leftTable);
+						undercased(rightTable);
+
+						//cout << "|" << leftTable << "|" << rightTable << "|" << leftAttribute << "|" << rightAttribute << "|" << endl;
+
+						databaseList[globalWorkingDatabase].leftJoin("*", leftTable, rightTable, leftAttribute, rightAttribute);
 					}
 				}
 			}
