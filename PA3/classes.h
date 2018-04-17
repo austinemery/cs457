@@ -30,6 +30,7 @@ class Table{
 		void updateTuple( string );
 		void deleteTuple( string );
 		bool setMeta( string );		//sets meta data and returns status
+		int getMetaIndex( string );
 
 	private:
 		int numbTuples;
@@ -38,6 +39,8 @@ class Table{
 		string databaseName;		//Name of associated database
 		vector<string> metaData;	//vector of the column types
 		vector < vector <string> > data;
+
+		friend class Database;
 };
 
 class Database{
@@ -58,6 +61,8 @@ class Database{
 		void printTable( string, string, string, string );
 		ofstream& printTableFile( string , ofstream& );
 		void listTables();
+		int getTableIndex( string );
+		void innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt );
 
 	private:
 		string name;				//name of database
