@@ -177,14 +177,33 @@ int main()
 			}
 			else if ((inputFromUser.find("table") != string::npos))//CREATE TABLE tbl_1 (a1 int, a2 varchar(20)); 
 			{
-				cin >> tempTableName;
+				//need to read until parenthesis here
+				char tempChar = 'a';
+				string reallyReallyTempString;
+				tempTableName.erase(tempTableName.begin(), tempTableName.end());
+
+				getchar();
+
+				while (tempChar = getchar())
+				{
+					if (tempChar == '(')
+					{
+						break;
+					}
+					reallyReallyTempString = tempChar;
+					tempTableName.append(reallyReallyTempString);
+				}
+
 				undercased(tempTableName);
+
+				//cout << "TEST: |" << tempTableName << "|" << endl;
 
 				vector<string> userGivenMetaData;
 				int commaCount = 0;
 
 				getline(cin, inputFromUser);
 
+				//cout << "REEE: |" << inputFromUser << "|" << endl;
 
 				//find how many commas exist
 				for (int i = 0; i < inputFromUser.size(); ++i)
@@ -196,7 +215,7 @@ int main()
 				}
 
 				//get data parsed
-				inputFromUser = inputFromUser.substr(1);
+				//inputFromUser = inputFromUser.substr(1);
 				for (int i = 0; i < commaCount; ++i)
 				{
 					userGivenMetaData.push_back(inputFromUser.substr(1, inputFromUser.find(",") - 1));
