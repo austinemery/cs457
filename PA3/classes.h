@@ -30,6 +30,7 @@ class Table{
 		void updateTuple( string );
 		void deleteTuple( string );
 		bool setMeta( string );		//sets meta data and returns status
+		int getMetaIndex( string );
 
 	private:
 		int numbTuples;
@@ -58,6 +59,7 @@ class Database{
 		void printTable( string, string, string, string );
 		ofstream& printTableFile( string , ofstream& );
 		void listTables();
+		int getTableIndex( string );
 		void innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt );
 		void leftJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt );
 

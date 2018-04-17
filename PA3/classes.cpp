@@ -540,7 +540,16 @@ string Table::getDatabaseName()
 {
 	return databaseName;
 }
+int Table::getMetaIndex( string givenMeta )
+{
+	int i = 0;
+	while( givenMeta != metaData[i] )
+	{
+		i++;
+	}
 
+	return i;
+}
 
 /*
  * Class Implementation
@@ -727,13 +736,32 @@ void Database::listTables()
 		cout << tableData[index].getName() << endl;	
 	}
 }
+int Database::getTableIndex( string givenTable )
+{
+	int i = 0;
+	while( givenTable != tableData[i].getName() )
+	{
+		i++;
+	}
+
+	return i;
+}
 void Database::innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt )
 {
+	int indexLeftTable = getTableIndex( leftTableName );
+	int indexRightTable = getTableIndex( rightTableName );
+	int indexLeftAtt = tableData[indexLeftTable].getMetaIndex( leftAtt );
+	int indexRightAtt = tableData[indexRightTable].getMetaIndex( rightAtt );
 
 }
 
 void Database::leftJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt )
 {
+	int indexLeftTable = getTableIndex( leftTableName );
+	int indexRightTable = getTableIndex( rightTableName );
+	int indexLeftAtt = tableData[indexLeftTable].getMetaIndex( leftAtt );
+	int indexRightAtt = tableData[indexRightTable].getMetaIndex( rightAtt );
+
 	vector<string> tempMetaData;
 	Table tempJoin("databaseName", "tableName", tempMetaData)
 }
