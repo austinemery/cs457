@@ -727,3 +727,7 @@ void Database::listTables()
 		cout << tableData[index].getName() << endl;	
 	}
 }
+void Database::innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt )
+{
+
+}
