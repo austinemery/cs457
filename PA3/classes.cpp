@@ -323,6 +323,9 @@ void Table::addMetaCol( string givenCol )
 
 void Table::addTuple( string givenData )
 {
+
+	cout << "I'm in Table: " << name << endl;
+	cout << "I'm trying to add: " << givenData << endl;
 	vector<string> parsedTuple;
 	string holdData;
 	string assemblingData;
@@ -583,7 +586,10 @@ string Database::getName()
 }
 void Database::addTable( Table& givenTable )
 {
+cout << "I'm in addTable trying to add: " << givenTable.getName() << endl;
+givenTable.printData();
 	tableData.push_back( givenTable );
+cout << "Leaving addTable" << endl;
 }
 void Database::deleteTable( string tableToDelete )
 {
