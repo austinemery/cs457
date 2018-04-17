@@ -532,14 +532,6 @@ int main()
 			//not supposed to do anything! this way we can leave the loop without an issue.
 			cout << "All done." << endl;
 		}
-		else if (inputFromUser == "leave")
-		{
-			cout << "Inner" << endl;
-			databaseList[globalWorkingDatabase].innerJoin( "*" , "employee", "sales","id","employeeID");
-		
-			cout << "left" << endl;
-			databaseList[globalWorkingDatabase].leftJoin("*" , "employee", "sales","id","employeeID");
-		}
 		else 
 		{
 			cout << "--ERROR: Command not found, type commands for list--" << endl;

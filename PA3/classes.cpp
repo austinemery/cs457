@@ -543,15 +543,10 @@ string Table::getDatabaseName()
 int Table::getMetaIndex( string givenMeta )
 {
 	int i = 0;
-	cout << "Start of getMetaIndex" << endl;
-	while( givenMeta != metaData[i] )
+	while( metaData[i].find(givenMeta) == string::npos )
 	{
-		cout << "Given Meta: " << givenMeta << endl;
-		cout << "metaData[i]: " << metaData[i] << endl;
 		i++;
 	}
-	cout << "Given Meta: " << givenMeta << endl;
-	cout << "metaData[i]: " << metaData[i] << endl;
 	return i;
 }
 
@@ -742,32 +737,22 @@ void Database::listTables()
 }
 int Database::getTableIndex( string givenTable )
 {
-	cout << "Start of getTableIndex" << endl;
 	int i = 0;
 	while( givenTable != tableData[i].getName() )
 	{
-		cout << "GivenTable: " << givenTable << endl;
-		cout << "tableData[i].getName(): " << tableData[i].getName() << endl;
 		i++;
 	}
-
-	cout << "GivenTable: " << givenTable << endl;
-	cout << "tableData[i].getName(): " << tableData[i].getName() << endl;
 	return i;
 }
 
 void Database::innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt )
 {
-	cout << "1" << endl;
-	int indexLeftTable = 0;
-	indexLeftTable = getTableIndex( leftTableName );
-	cout << "2" << endl;
+
+	int indexLeftTable = getTableIndex( leftTableName );
 	int indexRightTable = getTableIndex( rightTableName );
-	cout << "3" << endl;
 	int indexLeftAtt = tableData[indexLeftTable].getMetaIndex( leftAtt );
-	cout << "4" << endl;
 	int indexRightAtt = tableData[indexRightTable].getMetaIndex( rightAtt );
-	cout << "5" << endl;
+
 	for( int index = 0 ; index < tableData[indexLeftTable].numbAtt ; index++ )
 	{
 	
@@ -778,11 +763,11 @@ void Database::innerJoin( string joinSelection , string leftTableName , string r
 
 		if( jndex != ( tableData[indexRightTable].numbAtt-1 ))
 		{
-			cout << tableData[indexRightAtt].metaData[jndex] << "|";
+			cout << tableData[indexRightTable].metaData[jndex] << "|";
 		}else
 		{
-			cout << tableData[indexRightAtt].metaData[jndex];
-		} cout << endl;
+			cout << tableData[indexRightTable].metaData[jndex] << endl;
+		} 
 	}
 
 	//for the attribute of interest in the left table
@@ -803,12 +788,12 @@ void Database::innerJoin( string joinSelection , string leftTableName , string r
 				{
 					if( rightTableTupleIndex != ( tableData[indexRightTable].numbAtt-1 ))
 					{
-						cout << tableData[indexRightAtt].data[jndex][rightTableTupleIndex] << "|";
+						cout << tableData[indexRightTable].data[jndex][rightTableTupleIndex] << "|";
 					}
 					else
 					{
-						cout << tableData[indexRightAtt].data[jndex][rightTableTupleIndex];
-					} cout << endl;					
+						cout << tableData[indexRightTable].data[jndex][rightTableTupleIndex] << endl;
+					}
 				}
 			
 			}
@@ -834,11 +819,11 @@ void Database::leftJoin( string joinSelection , string leftTableName , string ri
 
 		if( jndex != ( tableData[indexRightTable].numbAtt-1 ))
 		{
-			cout << tableData[indexRightAtt].metaData[jndex] << "|";
+			cout << tableData[indexRightTable].metaData[jndex] << "|";
 		}else
 		{
-			cout << tableData[indexRightAtt].metaData[jndex];
-		} cout << endl;
+			cout << tableData[indexRightTable].metaData[jndex] << endl;
+		}
 	}
 
 	int count = 0;
@@ -859,12 +844,12 @@ void Database::leftJoin( string joinSelection , string leftTableName , string ri
 				{
 					if( rightTableTupleIndex != ( tableData[indexRightTable].numbAtt-1 ))
 					{
-						cout << tableData[indexRightAtt].data[jndex][rightTableTupleIndex] << "|";
+						cout << tableData[indexRightTable].data[jndex][rightTableTupleIndex] << "|";
 					}
 					else
 					{
-						cout << tableData[indexRightAtt].data[jndex][rightTableTupleIndex];
-					} cout << endl;					
+						cout << tableData[indexRightTable].data[jndex][rightTableTupleIndex] << endl;
+					} 
 				}
 				count++;
 			}
@@ -877,7 +862,8 @@ void Database::leftJoin( string joinSelection , string leftTableName , string ri
 			}
 			for( int jndex = 0 ; jndex < tableData[indexRightTable].numbAtt ; jndex++ )
 			{
-				cout << " | ";
+				if( jndex != tableData[indexRightTable].numbAtt-1 )
+					cout << "|";
 			}
 			cout << endl;
 		}
