@@ -63,6 +63,7 @@ class Database{
 		void listTables();
 		int getTableIndex( string );
 		void innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt );
+		void leftJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt );
 
 	private:
 		string name;				//name of database
