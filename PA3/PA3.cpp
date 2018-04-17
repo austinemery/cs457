@@ -196,14 +196,14 @@ int main()
 
 				undercased(tempTableName);
 
-				//cout << "TEST: |" << tempTableName << "|" << endl;
+				cout << "TEST: |" << tempTableName << "|" << endl;
 
 				vector<string> userGivenMetaData;
 				int commaCount = 0;
 
 				getline(cin, inputFromUser);
 
-				//cout << "REEE: |" << inputFromUser << "|" << endl;
+				cout << "REEE: |" << inputFromUser << "|" << endl;
 
 				//find how many commas exist
 				for (int i = 0; i < inputFromUser.size(); ++i)
@@ -218,7 +218,7 @@ int main()
 				//inputFromUser = inputFromUser.substr(1);
 				for (int i = 0; i < commaCount; ++i)
 				{
-					userGivenMetaData.push_back(inputFromUser.substr(1, inputFromUser.find(",") - 1));
+					userGivenMetaData.push_back(inputFromUser.substr(0, inputFromUser.find(",")));
 					inputFromUser = inputFromUser.substr(inputFromUser.find(",") + 1);
 				}
 
@@ -291,6 +291,7 @@ int main()
 			else
 			{
 				cin >> inputFromUser;
+				string joinString = inputFromUser;
 				if (inputFromUser == "where")
 				{
 					//grab whole condition
@@ -302,6 +303,18 @@ int main()
 					}
 					condition.erase(condition.find_last_of(';'));
 					//cout << "condition after erase: " << condition << endl;
+				}
+				//Join parsing
+				else
+				{
+					cout << "Join String at start: " << joinString << endl;
+
+					while (inputFromUser.find("where") == string::npos)
+					{
+						cin >> inputFromUser;
+						joinString.append(inputFromUser);
+						cout << "Join String inside loop: " << joinString << endl;
+					}
 				}
 			}
 
