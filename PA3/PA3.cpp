@@ -196,14 +196,14 @@ int main()
 
 				undercased(tempTableName);
 
-				cout << "TEST: |" << tempTableName << "|" << endl;
+				//cout << "TEST: |" << tempTableName << "|" << endl;
 
 				vector<string> userGivenMetaData;
 				int commaCount = 0;
 
 				getline(cin, inputFromUser);
 
-				cout << "REEE: |" << inputFromUser << "|" << endl;
+				//cout << "REEE: |" << inputFromUser << "|" << endl;
 
 				//find how many commas exist
 				for (int i = 0; i < inputFromUser.size(); ++i)
@@ -259,6 +259,7 @@ int main()
 			string stringsToQuery, tableName;
 			string tempString;
 			string printFlag = "all";
+			string joinFlag = "none";
 			string condition;
 
 			cin >> inputFromUser;
@@ -283,6 +284,7 @@ int main()
 			
 			cin >> tableName; // Name of table
 			undercased(tableName);
+			string joinString;
 			if (tableName.find(";") != string::npos)
 			{
 				tableName.erase(tableName.length() - 1, 1);
@@ -291,7 +293,7 @@ int main()
 			else
 			{
 				cin >> inputFromUser;
-				string joinString = inputFromUser;
+				joinString = tableName;
 				if (inputFromUser == "where")
 				{
 					//grab whole condition
@@ -303,29 +305,81 @@ int main()
 					}
 					condition.erase(condition.find_last_of(';'));
 					//cout << "condition after erase: " << condition << endl;
+
+					if( databaseList[globalWorkingDatabase].hasTable(tableName))
+					{
+						databaseList[globalWorkingDatabase].printTable(tableName, printFlag, stringsToQuery, condition);
+					}
+					else
+					{
+						cout << "--!Failed to query table " << inputFromUser << " because it does not exist." << endl;
+					}
 				}
 				//Join parsing
 				else
 				{
-					cout << "Join String at start: " << joinString << endl;
+					//cout << "Join String at start: " << joinString << endl;
 
-					while (inputFromUser.find("where") == string::npos)
+					while (inputFromUser.find("where") == string::npos && inputFromUser.find("on") == string::npos)
+					{
+						joinString.append(" " + inputFromUser);
+						cin >> inputFromUser;
+						//cout << "Join String inside loop: " << joinString << endl;
+					}
+					//cout << "Join String after loop: " << joinString << endl;
+
+					//grab whole condition
+					while (condition.find(';') == string::npos)
 					{
 						cin >> inputFromUser;
-						joinString.append(inputFromUser);
-						cout << "Join String inside loop: " << joinString << endl;
+
+						condition += (inputFromUser + " ");
+					}
+					condition.erase(condition.find_last_of(';'));
+					//cout << "condition after erase: " << condition << endl;
+
+					//determine what join and print
+
+					//inner join
+					if (joinString.find(",") != string::npos || joinString.find("inner") != string::npos)
+					{
+						//cout << "INNER" << endl;
+						string newStringWithoutLastChar = joinString.substr(0, joinString.find_last_of(" "));
+		
+						string leftTable = joinString.substr(0, joinString.find_first_of(" "));
+						string rightTable = newStringWithoutLastChar.substr(newStringWithoutLastChar.find_last_of(" ") + 1, (newStringWithoutLastChar.length() - newStringWithoutLastChar.find_last_of(" ")));
+						string leftAttribute = condition.substr(condition.find_first_of(".") + 1, (condition.find_first_of(" ") - condition.find_first_of(".") - 1));
+						string rightAttribute = condition.substr(condition.find_last_of(".") + 1, (condition.length() - condition.find_last_of(".")));
+
+						undercased(leftTable);
+						undercased(rightTable);
+
+						//cout << "|" << leftTable << "|" << rightTable << "|" << leftAttribute << "|" << rightAttribute << "|" << endl;
+
+						databaseList[globalWorkingDatabase].innerJoin("*", leftTable, rightTable, leftAttribute, rightAttribute);
+					}
+					//outer join
+					else if (joinString.find("outer") != string::npos)
+					{
+						//cout << "OUTER" << endl;
+						string newStringWithoutLastChar = joinString.substr(0, joinString.find_last_of(" "));
+		
+						string leftTable = joinString.substr(0, joinString.find_first_of(" "));
+						string rightTable = newStringWithoutLastChar.substr(newStringWithoutLastChar.find_last_of(" ") + 1, (newStringWithoutLastChar.length() - newStringWithoutLastChar.find_last_of(" ")));
+						string leftAttribute = condition.substr(condition.find_first_of(".") + 1, (condition.find_first_of(" ") - condition.find_first_of(".") - 1));
+						string rightAttribute = condition.substr(condition.find_last_of(".") + 1, (condition.length() - condition.find_last_of(".")));
+
+						undercased(leftTable);
+						undercased(rightTable);
+
+						//cout << "|" << leftTable << "|" << rightTable << "|" << leftAttribute << "|" << rightAttribute << "|" << endl;
+
+						databaseList[globalWorkingDatabase].leftJoin("*", leftTable, rightTable, leftAttribute, rightAttribute);
 					}
 				}
 			}
 
-			if( databaseList[globalWorkingDatabase].hasTable(tableName))
-			{
-				databaseList[globalWorkingDatabase].printTable(tableName, printFlag, stringsToQuery, condition);
-			}
-			else
-			{
-				cout << "--!Failed to query table " << inputFromUser << " because it does not exist." << endl;
-			}
+
 		}
 		else if ((inputFromUser.find("use") != string::npos))
 		{
