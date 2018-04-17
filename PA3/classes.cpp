@@ -543,11 +543,15 @@ string Table::getDatabaseName()
 int Table::getMetaIndex( string givenMeta )
 {
 	int i = 0;
+	cout << "Start of getMetaIndex" << endl;
 	while( givenMeta != metaData[i] )
 	{
+		cout << "Given Meta: " << givenMeta << endl;
+		cout << "metaData[i]: " << metaData[i] << endl;
 		i++;
 	}
-
+	cout << "Given Meta: " << givenMeta << endl;
+	cout << "metaData[i]: " << metaData[i] << endl;
 	return i;
 }
 
@@ -738,22 +742,32 @@ void Database::listTables()
 }
 int Database::getTableIndex( string givenTable )
 {
+	cout << "Start of getTableIndex" << endl;
 	int i = 0;
 	while( givenTable != tableData[i].getName() )
 	{
+		cout << "GivenTable: " << givenTable << endl;
+		cout << "tableData[i].getName(): " << tableData[i].getName() << endl;
 		i++;
 	}
 
+	cout << "GivenTable: " << givenTable << endl;
+	cout << "tableData[i].getName(): " << tableData[i].getName() << endl;
 	return i;
 }
 
 void Database::innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt )
 {
-	int indexLeftTable = getTableIndex( leftTableName );
+	cout << "1" << endl;
+	int indexLeftTable = 0;
+	indexLeftTable = getTableIndex( leftTableName );
+	cout << "2" << endl;
 	int indexRightTable = getTableIndex( rightTableName );
+	cout << "3" << endl;
 	int indexLeftAtt = tableData[indexLeftTable].getMetaIndex( leftAtt );
+	cout << "4" << endl;
 	int indexRightAtt = tableData[indexRightTable].getMetaIndex( rightAtt );
-
+	cout << "5" << endl;
 	for( int index = 0 ; index < tableData[indexLeftTable].numbAtt ; index++ )
 	{
 	
