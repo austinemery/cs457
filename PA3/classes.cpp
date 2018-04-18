@@ -324,9 +324,6 @@ void Table::addMetaCol( string givenCol )
 
 void Table::addTuple( string givenData )
 {
-
-	cout << "I'm in Table: " << name << endl;
-	cout << "I'm trying to add: " << givenData << endl;
 	vector<string> parsedTuple;
 	string holdData;
 	string assemblingData;
@@ -587,10 +584,10 @@ string Database::getName()
 }
 void Database::addTable( Table& givenTable )
 {
-cout << "I'm in addTable trying to add: |" << givenTable.getName() << "|" << "REEE:" <<  tableData.size() << endl;
-givenTable.printData();
+	if (tableData.size() == tableData.capacity())
+		tableData.reserve(tableData.size() + 10);
+
 	tableData.push_back(givenTable);
-cout << endl << "Leaving addTable" << endl;
 }
 void Database::deleteTable( string tableToDelete )
 {
@@ -806,6 +803,7 @@ void Database::innerJoin( string joinSelection , string leftTableName , string r
 			}
 		}
 	}
+	cout << endl;
 }
 
 void Database::leftJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt )
@@ -876,4 +874,5 @@ void Database::leftJoin( string joinSelection , string leftTableName , string ri
 		}
 		count = 0;
 	}
+	cout << endl;
 }

@@ -128,7 +128,7 @@ int main()
 
 	//used to hold database list info for running the program
 	vector<Database> databaseList;
-cout << "Above readDatabaseList()" << endl;
+
 	readDatabaseList(databaseList);
 
 	cout << endl << "This is a data management program!" << endl;
@@ -139,8 +139,6 @@ cout << "Above readDatabaseList()" << endl;
 		cin >> inputFromUser;
 
 		undercased(inputFromUser);
-
-		cout << "I'm starting with this information: " << inputFromUser << endl;
 
 		if (inputFromUser == "commands")
 		{
@@ -579,6 +577,9 @@ void readDatabaseList(vector<Database>& databaseVec)
 	ifstream tableIn;
 	ifstream tableMetaIn;
 
+	//notify user that data is being read from disk
+	cout << endl << "Reading data from Disk." << endl;
+
 	fin.open("./data/databaseList.txt");
 	
 	if (!fin.is_open())
@@ -590,7 +591,7 @@ void readDatabaseList(vector<Database>& databaseVec)
 	vector<string> tempMetaData;
 	string tempTableNames;
 	int databaseIndex = 0;
-cout << "Above File Entry / Parsing" << endl;
+
 	//while there are databases to read	
 	while (fin >> tempDataBaseName)
 	{
@@ -615,12 +616,8 @@ cout << "Above File Entry / Parsing" << endl;
 				break;
 			}
 		}
-/**************
-BUG IS UNDER HERE SOMEWHERE
-***************/
 		while (tableIn >> tempTableName)
 		{
-cout << "Table name we're investigating: |" << tempTableName << "|" << endl;
 			tableMetaIn.open(("./data/" + tempDataBaseName + "/" + tempTableName).c_str());
 
 			if (!tableMetaIn.is_open())
@@ -653,7 +650,6 @@ cout << "Table name we're investigating: |" << tempTableName << "|" << endl;
 					{
 						assembleString.erase(assembleString.length() - 1, 1);
 					}
-cout << "Isolated piece of meta: |" << assembleString << "|" << endl;
 					tempMetaData.push_back(assembleString);
 					assembleString.clear();
 				}
@@ -666,14 +662,12 @@ cout << "Isolated piece of meta: |" << assembleString << "|" << endl;
 			}
 			//push last string
 			tempMetaData.push_back(assembleString);
-cout << "Isolated piece of meta 2: |" << assembleString << "|" << endl;			
+			
 			//create table with pulled meta
-			cout << "DATABASE SIZE: " << databaseIndex << endl;
 			Table tempTable(tempTableName, tempDataBaseName, tempMetaData);
 
 			databaseVec[databaseIndex].addTable(tempTable);
 
-cout << "Just pushed table: " << tempTable.getName() << endl;
 			for( int i = 1 ; i < dataFromFile.size() ; i++ )
 			{
 				//Clean string to no longer have |
@@ -687,14 +681,11 @@ cout << "Just pushed table: " << tempTable.getName() << endl;
 
 				dataFromFile[i] += ' ';
 				databaseVec[globalWorkingDatabase].alterTable( "insert" , tempTableName , dataFromFile[i] );
-cout << "Just altered the table with data: " << dataFromFile[i] << endl;
 			}
 
 			tempMetaData.clear();
 			dataFromFile.clear();
 			tableMetaIn.close();
-
-cout << "Just finished adding a table." << endl << endl << endl;
 		}
 		tableIn.close();
 		databaseIndex++;
