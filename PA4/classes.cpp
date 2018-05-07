@@ -1,7 +1,7 @@
 //cs457
 //database.cpp
 //Austin Emery, Mercedes Anderson, Nickolas Johnson
-//Project 3
+//Project 4
 
 #include "classes.h"
 
@@ -14,6 +14,7 @@ Table::Table( string givenName , string givenDatabaseName , vector<string> given
 	numbTuples = 0;
 	name = givenName;
 	databaseName = givenDatabaseName;
+	locked = false;
 
 	for( int index = 0 ; index < givenMeta.size() ; index++ )
 	{
@@ -24,6 +25,7 @@ Table::Table( string givenName , string givenDatabaseName , vector<string> given
 }
 Table::Table( const Table& givenTable )
 {
+	locked = givenTable.locked;
 	for( int i = 0 ; i < givenTable.numbTuples ; i++ )
 	{
 		for( int j = 0 ; j < givenTable.numbAtt ; j++ )
@@ -287,6 +289,14 @@ void Table::printQueryData( string query, string condition)
 
 ofstream& Table::printDataFile( ofstream& fout )
 {
+	if( locked )
+	{
+		fout << "L" << endl;
+	}
+	else
+	{
+		fout << "U" << endl;
+	}
 	for( int index = 0 ; index < metaData.size() ; index++ )
 	{
 		if( index == ( metaData.size() - 1 ) )
@@ -629,22 +639,30 @@ void Database::alterTable( string command, string whichTable , string givenMeta 
 		}
 	}
 
-	if( command == "add" )
+	if( !tableData[tableIndex].locked )
 	{
-		tableData[tableIndex].addMetaCol( givenMeta );
+		if( command == "add" )
+		{
+			tableData[tableIndex].addMetaCol( givenMeta );
+		}
+		else if( command == "insert" )
+		{
+			tableData[tableIndex].addTuple( givenMeta );
+		}
+		else if( command == "update" )
+		{
+			tableData[tableIndex].updateTuple( givenMeta );
+		}
+		else if( command == "delete" )
+		{
+			tableData[tableIndex].deleteTuple( givenMeta );
+		}
 	}
-	else if( command == "insert" )
+	else
 	{
-		tableData[tableIndex].addTuple( givenMeta );
+		cout << "Error: Table " << whichTable << " is locked!" << endl;
 	}
-	else if( command == "update" )
-	{
-		tableData[tableIndex].updateTuple( givenMeta );
-	}
-	else if( command == "delete" )
-	{
-		tableData[tableIndex].deleteTuple( givenMeta );
-	}
+
 }
 ofstream& Database::printTableFile( string tableToPrint, ofstream& fout )
 {
@@ -875,4 +893,38 @@ void Database::leftJoin( string joinSelection , string leftTableName , string ri
 		count = 0;
 	}
 	cout << endl;
+}
+
+void Database::lockDatabase( ofstream& fout )
+{
+	for( int index = 0 ; index < tableData.size() ; index++ )
+	{
+		tableData[index].locked = true;
+		tableData[index].printDataFile(fout);
+	}
+
+
+}
+void Database::unlockDatabase( ofstream& fout )
+{
+	for( int index = 0 ; index < tableData.size() ; index++ )
+	{
+		tableData[index].locked = false;
+		tableData[index].printDataFile(fout);
+	}
+
+}
+
+void Database::setTableLockStatus( string tableName , string lockStatus )
+{
+	int index = getTableIndex(tableName);
+
+	if( lockStatus == "U" )
+	{
+		tableData[index].locked = false;
+	}
+	else
+	{
+		tableData[index].locked = true;
+	}
 }

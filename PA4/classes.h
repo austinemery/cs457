@@ -1,7 +1,7 @@
 //cs457
 //database.h
 //Austin Emery, Mercedes Anderson, Nickolas Johnson
-//Project 3
+//Project 4
 
 #include <iostream>
 #include <fstream>
@@ -35,6 +35,7 @@ class Table{
 	private:
 		int numbTuples;
 		int numbAtt;
+		bool locked;
 		string name;				//Name of table
 		string databaseName;		//Name of associated database
 		vector<string> metaData;	//vector of the column types
@@ -64,6 +65,9 @@ class Database{
 		int getTableIndex( string );
 		void innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt );
 		void leftJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt );
+		void lockDatabase( ofstream& fout );
+		void unlockDatabase( ofstream& fout );
+		void setTableLockStatus( string , string );
 
 	private:
 		string name;				//name of database

@@ -1,7 +1,7 @@
 //cs457
-//PA2.cpp
+//PA4.cpp
 //Austin Emery, Mercedes Anderson, Nickolas Johnson
-//Project 3
+//Project 4
 
 #include <iostream>
 #include <string>
@@ -626,6 +626,10 @@ void readDatabaseList(vector<Database>& databaseVec)
 				exit(1);
 			}
 
+
+			//Read in the lock status.
+			string getLock;
+			getline(tableMetaIn , getLock);
 			//Read in all data from file
 			while (getline(tableMetaIn, tempString))
 			{
@@ -683,6 +687,7 @@ void readDatabaseList(vector<Database>& databaseVec)
 				databaseVec[globalWorkingDatabase].alterTable( "insert" , tempTableName , dataFromFile[i] );
 			}
 
+			databaseVec[globalWorkingDatabase].setTableLockStatus( tempTableName , getLock );
 			tempMetaData.clear();
 			dataFromFile.clear();
 			tableMetaIn.close();
