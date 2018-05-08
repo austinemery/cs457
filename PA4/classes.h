@@ -66,8 +66,8 @@ class Database{
 		int getTableIndex( string );
 		void innerJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt );
 		void leftJoin( string joinSelection , string leftTableName , string rightTableName , string leftAtt , string rightAtt );
-		void lockDatabase( ofstream& fout );
-		void unlockDatabase( ofstream& fout );
+		void lockDatabase( );
+		void unlockDatabase( );
 		void setTableLockStatus( string , string );
 		bool getLock();
 

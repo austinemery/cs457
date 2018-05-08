@@ -573,9 +573,11 @@ Database::Database( string givenName )
 {
 	name = givenName;
 	tableData.clear();
+	lock = false;
 }
 Database::Database( const Database& givenDatabase )
 {
+	lock = givenDatabase.lock;
 	if( &givenDatabase != this )
 	{
 		tableData.clear();
@@ -643,7 +645,8 @@ void Database::alterTable( string command, string whichTable , string givenMeta 
 		}
 	}
 
-	if( !tableData[tableIndex].locked )
+	//If the table is locked and I'm locked
+	if( tableData[tableIndex].locked && lock )
 	{
 		if( command == "add" )
 		{
@@ -666,7 +669,6 @@ void Database::alterTable( string command, string whichTable , string givenMeta 
 	{
 		cout << "Error: Table " << whichTable << " is locked!" << endl;
 	}
-
 }
 ofstream& Database::printTableFile( string tableToPrint, ofstream& fout )
 {
@@ -899,24 +901,32 @@ void Database::leftJoin( string joinSelection , string leftTableName , string ri
 	cout << endl;
 }
 
-void Database::lockDatabase( ofstream& fout )
+void Database::lockDatabase( )
 {
+	ofstream fout;
+
+
 	lock = true;
 	for( int index = 0 ; index < tableData.size() ; index++ )
 	{
+		fout.open(("./data/" + name + "/" + tableData[index].getName()).c_str());
 		tableData[index].locked = true;
 		tableData[index].printDataFile(fout);
+		fout.close();
 	}
 
 
 }
-void Database::unlockDatabase( ofstream& fout )
+void Database::unlockDatabase( )
 {
+	ofstream fout;
 	lock = false;
 	for( int index = 0 ; index < tableData.size() ; index++ )
 	{
+		fout.open(("./data/" + name + "/" + tableData[index].getName()).c_str());
 		tableData[index].locked = false;
 		tableData[index].printDataFile(fout);
+		fout.close();
 	}
 
 }

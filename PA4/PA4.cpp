@@ -16,7 +16,6 @@
 using namespace std;
 
 int globalWorkingDatabase;	//int denoting database currently in use
-bool globalProcessKey = false;
 
 /**	@fn void readDatabaseList
 *	@brief read in the database list
@@ -504,7 +503,7 @@ int main()
 
 			databaseList[globalWorkingDatabase].alterTable( inputFromUser , tableName , metaData );
 			alterTable( databaseList , tableName , inputFromUser , metaData );
-		}		
+		}	
 		else if ((inputFromUser.find("delete") != string::npos) )
 		{
 			string moreInput, tableName, toDelete, varToDelete;
@@ -531,37 +530,20 @@ int main()
 			//update table
 			databaseList[globalWorkingDatabase].alterTable( inputFromUser , tableName , metaData );
 			alterTable( databaseList , tableName , inputFromUser , metaData );
+
 		}
-		//***********************//
-		//******BEGIN LOCKS******//
-		//***********************//
-		else if ((inputFromUser.find("begin") != string::npos) )
+//***********************//
+// MERCEDES CODE //
+//***********************//
+		else if( inputFromUser == "begin")
 		{
-			getline(cin, inputFromUser);
-			cout << "Transaction starts." << endl;
-			if(databaseList[globalWorkingDatabase].getLock() == false)
-				{
-					databaseList[globalWorkingDatabase].lockDatabase();
-					globalProcessKey = true;
-				}
+			cin >> inputFromUser; //toss the rest of the line
+
+			databaseList[globalWorkingDatabase].lockDatabase();
+		
 		}
-		else if ((inputFromUser.find("commit") != string::npos) )
-		{
-			getline(cin, inputFromUser);
-			if(globalProcessKey == true)
-			{
-				databaseList[globalWorkingDatabase].unlockDatabase();
-				globalProcessKey = false;
-				cout << "Transaction committed." << endl;
-			}
-			else
-			{
-				cout << "Transaction abort." << endl;
-			}
-		}
-		//***********************//
-		//*******END LOCKS*******//
-		//***********************//
+//******************************//
+		
 		else if (inputFromUser == ".exit")
 		{
 			//not supposed to do anything! this way we can leave the loop without an issue.
@@ -954,7 +936,3 @@ void alterTable( vector<Database>& databaseVec , string nameOfTable , string com
 		cout << "--!Failed to query table " << nameOfTable << " because it does not exist." << endl;
 	}
 }
-
-
-
-
