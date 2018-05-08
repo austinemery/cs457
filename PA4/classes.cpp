@@ -560,6 +560,10 @@ int Table::getMetaIndex( string givenMeta )
 	}
 	return i;
 }
+bool Table::getLock()
+{
+	return locked;
+}
 
 /*
  * Class Implementation
@@ -897,6 +901,7 @@ void Database::leftJoin( string joinSelection , string leftTableName , string ri
 
 void Database::lockDatabase( ofstream& fout )
 {
+	lock = true;
 	for( int index = 0 ; index < tableData.size() ; index++ )
 	{
 		tableData[index].locked = true;
@@ -907,6 +912,7 @@ void Database::lockDatabase( ofstream& fout )
 }
 void Database::unlockDatabase( ofstream& fout )
 {
+	lock = false;
 	for( int index = 0 ; index < tableData.size() ; index++ )
 	{
 		tableData[index].locked = false;
@@ -927,4 +933,9 @@ void Database::setTableLockStatus( string tableName , string lockStatus )
 	{
 		tableData[index].locked = true;
 	}
+}
+
+bool Database::getLock()
+{
+	return lock;
 }

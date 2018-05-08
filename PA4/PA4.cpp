@@ -16,6 +16,7 @@
 using namespace std;
 
 int globalWorkingDatabase;	//int denoting database currently in use
+bool globalProcessKey = false;
 
 /**	@fn void readDatabaseList
 *	@brief read in the database list
@@ -503,10 +504,7 @@ int main()
 
 			databaseList[globalWorkingDatabase].alterTable( inputFromUser , tableName , metaData );
 			alterTable( databaseList , tableName , inputFromUser , metaData );
-		}
-//***********************//
-//BEGIN DELETE ALTERATION//
-//***********************//			
+		}		
 		else if ((inputFromUser.find("delete") != string::npos) )
 		{
 			string moreInput, tableName, toDelete, varToDelete;
@@ -533,12 +531,37 @@ int main()
 			//update table
 			databaseList[globalWorkingDatabase].alterTable( inputFromUser , tableName , metaData );
 			alterTable( databaseList , tableName , inputFromUser , metaData );
-
 		}
-//***********************//
-// END DELETE ALTERATION //
-//***********************//
-
+		//***********************//
+		//******BEGIN LOCKS******//
+		//***********************//
+		else if ((inputFromUser.find("begin") != string::npos) )
+		{
+			getline(cin, inputFromUser);
+			cout << "Transaction starts." << endl;
+			if(databaseList[globalWorkingDatabase].getLock() == false)
+				{
+					databaseList[globalWorkingDatabase].lockDatabase();
+					globalProcessKey = true;
+				}
+		}
+		else if ((inputFromUser.find("commit") != string::npos) )
+		{
+			getline(cin, inputFromUser);
+			if(globalProcessKey == true)
+			{
+				databaseList[globalWorkingDatabase].unlockDatabase();
+				globalProcessKey = false;
+				cout << "Transaction committed." << endl;
+			}
+			else
+			{
+				cout << "Transaction abort." << endl;
+			}
+		}
+		//***********************//
+		//*******END LOCKS*******//
+		//***********************//
 		else if (inputFromUser == ".exit")
 		{
 			//not supposed to do anything! this way we can leave the loop without an issue.

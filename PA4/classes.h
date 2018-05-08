@@ -31,6 +31,7 @@ class Table{
 		void deleteTuple( string );
 		bool setMeta( string );		//sets meta data and returns status
 		int getMetaIndex( string );
+		bool getLock();
 
 	private:
 		int numbTuples;
@@ -68,8 +69,10 @@ class Database{
 		void lockDatabase( ofstream& fout );
 		void unlockDatabase( ofstream& fout );
 		void setTableLockStatus( string , string );
+		bool getLock();
 
 	private:
+		bool lock;
 		string name;				//name of database
 		vector<string> metaData;	//Name, creation time, owner, etc (info given by user)
 		vector<Table> tableData;	//vector containing tables
