@@ -6,8 +6,8 @@
 CREATE DATABASE CS457_PA4;
 USE CS457_PA4;
 create table Flights(seat int, status int);
-insert into Flights values(22,0);
-insert into Flights values(23,1);
+insert into Flights values(22,0); --there should be nothing to commit; it's an "abort"
+insert into Flights values(23,1); --there should be nothing to commit; it's an "abort"
 begin transaction;
 update flights set status = 1 where seat = 22;
 

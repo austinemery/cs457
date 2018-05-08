@@ -177,6 +177,8 @@ int main()
 				cin >> inputFromUser;
 				undercased(inputFromUser);
 				createDatabase(databaseList, inputFromUser.substr(0, inputFromUser.length() - 1));
+				updateDatabaseList(databaseList);
+
 			}
 			else if ((inputFromUser.find("table") != string::npos))//CREATE TABLE tbl_1 (a1 int, a2 varchar(20)); 
 			{
@@ -259,6 +261,9 @@ int main()
 		}
 		else if ((inputFromUser.find("select") != string::npos))
 		{
+			databaseList.clear();
+			readDatabaseList(databaseList);
+			
 			string stringsToQuery, tableName;
 			string tempString;
 			string printFlag = "all";
@@ -291,6 +296,7 @@ int main()
 			if (tableName.find(";") != string::npos)
 			{
 				tableName.erase(tableName.length() - 1, 1);
+				databaseList[globalWorkingDatabase].printTable(tableName, printFlag, stringsToQuery, condition);
 			}
 			//there is more to parse
 			else
@@ -384,6 +390,9 @@ int main()
 		}
 		else if ((inputFromUser.find("use") != string::npos))
 		{
+			databaseList.clear();
+			readDatabaseList(databaseList);
+			
 			cin >> inputFromUser;
 			undercased(inputFromUser);
 			changeWorkingDatabase(databaseList, inputFromUser.substr(0, inputFromUser.length() - 1));
@@ -395,7 +404,6 @@ int main()
 			if((inputFromUser.find("table") != string::npos))
 			{
 				//ALTER TABLE tbl_1 ADD a3 float;
-				cin >> nameOfTable;
 				undercased(nameOfTable);
 				cin >> command;
 				cin >> metaDataInQuestion;
@@ -456,6 +464,7 @@ int main()
 
 			databaseList[globalWorkingDatabase].alterTable( command , nameOfTable , grab );
 			alterTable( databaseList , nameOfTable , command , grab );		
+			cout << "1 new record inserted." << endl;
 		}
 		else if ((inputFromUser.find("update") != string::npos) )
 		{
@@ -539,11 +548,12 @@ int main()
 		{
 			getline(cin, inputFromUser);
 			cout << "Transaction starts." << endl;
-			if(databaseList[globalWorkingDatabase].getLock() == false)
-				{
-					databaseList[globalWorkingDatabase].lockDatabase();
-					globalProcessKey = true;
-				}
+
+			if(databaseList[globalWorkingDatabase].getTableLockStatus() == false) //check to make sure a table is locked
+			{
+				databaseList[globalWorkingDatabase].lockDatabase();
+				globalProcessKey = true;
+			}
 		}
 		else if ((inputFromUser.find("commit") != string::npos) )
 		{
@@ -552,6 +562,7 @@ int main()
 			{
 				databaseList[globalWorkingDatabase].unlockDatabase();
 				globalProcessKey = false;
+
 				cout << "Transaction committed." << endl;
 			}
 			else
@@ -601,7 +612,7 @@ void readDatabaseList(vector<Database>& databaseVec)
 	ifstream tableMetaIn;
 
 	//notify user that data is being read from disk
-	cout << endl << "Reading data from Disk." << endl;
+	//cout << endl << "Reading data from Disk." << endl;
 
 	fin.open("./data/databaseList.txt");
 	
@@ -937,17 +948,7 @@ void alterTable( vector<Database>& databaseVec , string nameOfTable , string com
 {
 	if( databaseVec[globalWorkingDatabase].hasTable(nameOfTable) )
 	{
-		//databaseVec[globalWorkingDatabase].alterTable( command , nameOfTable , metaDataInQuestion );
-
-		//to file
-		ofstream fout;
-		fout.open(("./data/" + databaseVec[globalWorkingDatabase].getName() + "/" + nameOfTable).c_str());
-		databaseVec[globalWorkingDatabase].printTableFile(nameOfTable, fout);
-
-		//fout << metaDataInQuestion << endl;
-		fout.close();
-		
-		// 	cout << "Table " << nameOfTable << " has been altered." << endl;
+		// just make sure that 
 	}
 	else
 	{

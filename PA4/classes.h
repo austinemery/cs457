@@ -70,6 +70,7 @@ class Database{
 		void unlockDatabase( );
 		void setTableLockStatus( string , string );
 		bool getLock();
+		bool getTableLockStatus();
 
 	private:
 		bool lock;

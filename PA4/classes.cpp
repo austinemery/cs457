@@ -356,7 +356,6 @@ void Table::addTuple( string givenData )
 	}
 
 	data.push_back(parsedTuple);
-	cout << "1 new record inserted." << endl;
 	numbTuples++;
 
 	//printData();
@@ -645,8 +644,8 @@ void Database::alterTable( string command, string whichTable , string givenMeta 
 		}
 	}
 
-	//If the table is locked and I'm locked
-	if( tableData[tableIndex].locked && lock )
+	//If the table is locked and I'm locked. And likewise.
+	if( (tableData[tableIndex].locked && lock) || (!tableData[tableIndex].locked && !lock) )
 	{
 		if( command == "add" )
 		{
@@ -664,6 +663,7 @@ void Database::alterTable( string command, string whichTable , string givenMeta 
 		{
 			tableData[tableIndex].deleteTuple( givenMeta );
 		}
+
 	}
 	else
 	{
@@ -904,8 +904,6 @@ void Database::leftJoin( string joinSelection , string leftTableName , string ri
 void Database::lockDatabase( )
 {
 	ofstream fout;
-
-
 	lock = true;
 	for( int index = 0 ; index < tableData.size() ; index++ )
 	{
@@ -929,6 +927,13 @@ void Database::unlockDatabase( )
 		fout.close();
 	}
 
+
+				// ofstream fout;
+				// fout.open(("./data/" + name + "/" + tableData[tableIndex].getName()).c_str());
+				// printTableFile(whichTable, fout);
+
+				// //fout << metaDataInQuestion << endl;
+				// fout.close();
 }
 
 void Database::setTableLockStatus( string tableName , string lockStatus )
@@ -945,6 +950,18 @@ void Database::setTableLockStatus( string tableName , string lockStatus )
 	}
 }
 
+bool Database::getTableLockStatus()
+{
+	if( !tableData.empty() )
+	{
+		return tableData[0].locked;
+	}
+	else
+	{
+		cout << "GET OUT OF MY ROOM I'M PLAYING MINECRAFT." << endl;
+	}
+
+}
 bool Database::getLock()
 {
 	return lock;
